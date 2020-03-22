@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FlightPrices.Skyscanner.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.ApiKey">
+            <summary>
+            This class acts as a container for the Skyscanner API key to be used by
+            .NET core's dependency injection framework.
+            </summary>
+        </member>
+        <member name="P:FlightPrices.Skyscanner.WebAPI.Clients.ApiKey.Value">
+            <summary>
+            Property for retrieving the actual value of the Skyscanner API key
+            from the wrapper object.
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.ApiKey.#ctor(System.String)">
+            <summary>
+            Constructor for the ApiKey class.
+            </summary>
+            <param name="value">The value of the Skyscanner API key.</param>
+        </member>
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerBaseUrl">
+            <summary>
+            This class acts as a container for the Skyscanner API URL to be used 
+            by .NET core's dependency injection framework.
+            </summary>
+        </member>
+        <member name="P:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerBaseUrl.Value">
+            <summary>
+            Property for retrieving the actual value of the Skyscanner API URL
+            from the wrapper object.
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerBaseUrl.#ctor(System.String)">
+            <summary>
+            Constructor for the SkyscannerBaseUrl class.
+            </summary>
+            <param name="value">The value of the Skyscanner API URL.</param>
+        </member>
+    </members>
+</doc>
