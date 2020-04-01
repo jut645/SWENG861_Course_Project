@@ -1,0 +1,10 @@
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\bin\Debug\FlightPrices.Database.dacpac
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\obj\Debug\FlightPrices.Database.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\obj\Debug\FlightPrices.Database.pdb
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\bin\Debug\FlightPrices.Database.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\bin\Debug\FlightPrices.Database.pdb
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\obj\Debug\FlightPrices.Database.sqlprojAssemblyReference.cache
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\obj\Debug\Model.xml
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\obj\Debug\refactor.xml
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\obj\Debug\postdeploy.sql
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Database\obj\Debug\predeploy.sql
