@@ -7,23 +7,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using FlightPrices.WebApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using FlightPrices.WebApp.ViewModels.Home;
 
 namespace FlightPrices.WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly FlightPricesContext _context;
 
-        public HomeController(ILogger<HomeController> logger, FlightPricesContext context)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _context = context;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Search(HomeSearchViewModel searchForm)
+        {
+
+            return View("Flights");
         }
 
         public IActionResult Privacy()

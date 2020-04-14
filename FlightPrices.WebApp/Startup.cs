@@ -36,7 +36,7 @@ namespace FlightPrices.WebApp
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddDbContext<FlightPricesContext>();
+            //services.AddDbContext<FlightPricesContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

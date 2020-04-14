@@ -8,7 +8,7 @@ namespace FlightPrices.WebApp.ViewModels.Map
 {
     public class MapIndexPageViewModel
     {
-        public IEnumerable<Airports> Airports { get; set; }
+        //public IEnumerable<Airports> Airports { get; set; }
 
     }
 }

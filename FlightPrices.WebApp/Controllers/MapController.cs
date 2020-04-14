@@ -12,11 +12,9 @@ namespace FlightPrices.WebApp.Controllers
     public class MapController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly FlightPricesContext _context;
 
-        public MapController(ILogger<HomeController> logger, FlightPricesContext context)
+        public MapController(ILogger<HomeController> logger)
         {
-            _context = context;
             _logger = logger;
         }
 
@@ -24,7 +22,6 @@ namespace FlightPrices.WebApp.Controllers
         {
             var viewModel = new MapIndexPageViewModel()
             {
-                Airports = _context.Airports.ToList()
             };
 
             return View(viewModel);

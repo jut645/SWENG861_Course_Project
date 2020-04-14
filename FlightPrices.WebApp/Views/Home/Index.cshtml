@@ -1,36 +1,77 @@
-﻿@{
+﻿@model FlightPrices.WebApp.ViewModels.Home.HomeSearchViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-@using (Html.BeginForm(actionName: "DisplayCustomer", controllerName: "DisplayResult", FormMethod.Post))
+@using (Html.BeginForm(actionName: "Search", controllerName: "Home", 
+            method: FormMethod.Post))
 {
     <div class="form-group">
-        <label for="origin">Where From?</label>
-        <input type="text" class="form-control" id="origin" aria-describedby="origin-help" placeholder="Select Origin">
-        <small id="origin-help" class="form-text text-muted">This is the aiport you'll depart from.</small>
+        <label for="origin">
+            Where From?
+        </label>
+        <input type="text" 
+               class="form-control" 
+               id="origin" 
+               aria-describedby="origin-help" 
+               placeholder="Select Origin"
+               asp-for="OriginAiport"/>
+        <small id="origin-help" 
+               class="form-text text-muted">
+            This is the aiport you'll depart from.
+        </small>
     </div>
     <div class="form-group">
-        <label for="destination">Where To?</label>
-        <input type="text" class="form-control" id="destination" aria-describedby="destination-help" placeholder="Select Destination">
-        <small id="destination-help" class="form-text text-muted">This is the aiport you'll arrive at.</small>
+        <label for="destination">
+            Where To?
+        </label>
+        <input type="text" 
+               class="form-control" 
+               id="destination" 
+               aria-describedby="destination-help" 
+               placeholder="Select Destination"
+               asp-for="DestinationAirport"/>
+        <small id="destination-help" 
+               class="form-text text-muted">
+            This is the aiport you'll arrive at.
+        </small>
     </div>
     <div class="form-group">
         <div>
-            <label for="departure-date">When Do You Want To Leave?</label>
+            <label for="departure-date">
+                When Do You Want To Leave?
+            </label>
         </div>
-        <input id="departure-date" type="datetime-local">
+        <input id="departure-date" 
+               type="date"
+               asp-for="TakeOffDate"/>
     </div>
     <div class="form-group">
         <div>
-            <label for="return-date">When Do You Want To Return?</label>
+            <label for="return-date">
+                When Do You Want To Return?
+            </label>
         </div>
-        <input id="return-date" type="datetime-local" disabled>
+        <input id="return-date" 
+               type="date"
+               asp-for="ReturnDate"
+               disabled/>
     </div>
     <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="round-trip">
-        <label class="form-check-label" for="round-trip">Round Trip</label>
+        <input type="checkbox" 
+               class="form-check-input" 
+               id="round-trip"
+               asp-for="IsRoundTrip"/>
+        <label class="form-check-label" 
+               for="round-trip">
+            Round Trip
+        </label>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" 
+            class="btn btn-primary">
+        Submit
+    </button>
 }
 
 @section Scripts

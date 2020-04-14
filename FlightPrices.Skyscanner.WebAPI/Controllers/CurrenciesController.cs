@@ -1,4 +1,5 @@
 ﻿using FlightPrices.Skyscanner.WebAPI.Clients;
+using FlightPrices.Skyscanner.WebAPI.Clients.Contracts;
 using FlightPrices.Skyscanner.WebAPI.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,19 +15,19 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
     public class CurrenciesController
     {
         private readonly ILogger<CurrenciesController> _logger;
-        private readonly SkyscannerClient<CurrenciesResponse> _client;
+        private readonly ISkyscannerClient _client;
 
         public CurrenciesController(ILogger<CurrenciesController> logger,
-            SkyscannerClient<CurrenciesResponse> client)
+            ISkyscannerClient client)
         {
             _logger = logger;
             _client = client;
         }
 
         [HttpGet]
-        public async Task<CurrenciesResponse> Get()
+        public async Task<string> Get()
         {
-            return await _client.GetAll();
+            return "Hello Currencies";
         }
     }
 }

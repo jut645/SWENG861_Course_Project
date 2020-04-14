@@ -10,7 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightPrices.WebApp", "FlightPrices.WebApp\FlightPrices.WebApp.csproj", "{1CB2EF68-43CE-4789-B3B9-A0388D6EE881}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightPrices.WebApp", "FlightPrices.WebApp\FlightPrices.WebApp.csproj", "{1CB2EF68-43CE-4789-B3B9-A0388D6EE881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightPrices.Tests", "FlightPrices.Tests\FlightPrices.Tests.csproj", "{54C3B55C-F21F-44C2-821F-B684BC9EE8DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{1CB2EF68-43CE-4789-B3B9-A0388D6EE881}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CB2EF68-43CE-4789-B3B9-A0388D6EE881}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CB2EF68-43CE-4789-B3B9-A0388D6EE881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54C3B55C-F21F-44C2-821F-B684BC9EE8DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54C3B55C-F21F-44C2-821F-B684BC9EE8DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54C3B55C-F21F-44C2-821F-B684BC9EE8DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54C3B55C-F21F-44C2-821F-B684BC9EE8DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

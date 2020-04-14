@@ -153,3 +153,4 @@ C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Map\Index.cshtml.g.cs
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Flights.cshtml.g.cs
