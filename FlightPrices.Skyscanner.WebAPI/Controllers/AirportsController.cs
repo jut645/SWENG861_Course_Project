@@ -2,6 +2,7 @@
 using FlightPrices.Skyscanner.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BrowseQuotesController
+    public class AirportsController
     {
         private readonly ILogger<CurrenciesController> _logger;
         private readonly ISkyscannerClient _client;
 
-        public BrowseQuotesController(ILogger<CurrenciesController> logger,
+        public AirportsController(ILogger<CurrenciesController> logger,
             ISkyscannerClient client)
         {
             _logger = logger;
@@ -24,9 +25,11 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         }
 
         [HttpGet]
-        public IList<Airports> Get()
+        public string Get()
         {
-            return _client.GetAirports();
+            var payload = new { airports = _client.GetAirports() };
+
+            return JsonConvert.SerializeObject(payload);
         }
     }
 }

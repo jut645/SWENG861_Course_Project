@@ -154,3 +154,14 @@ C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Map\Index.cshtml.g.cs
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Flights.cshtml.g.cs
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.exe
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\Microsoft.Threading.Tasks.Extensions.Desktop.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\Microsoft.Threading.Tasks.Extensions.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\Microsoft.Threading.Tasks.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\System.Net.Http.Extensions.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\System.Net.Http.Primitives.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\unirest-net.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.pdb
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.xml
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.dll.config

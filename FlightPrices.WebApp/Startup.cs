@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using FlightPrices.WebApp.Models;
+using FlightPrices.Skyscanner.WebAPI.Clients.Contracts;
+using FlightPrices.Skyscanner.WebAPI.Clients;
 
 namespace FlightPrices.WebApp
 {
@@ -28,6 +30,8 @@ namespace FlightPrices.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -36,7 +40,6 @@ namespace FlightPrices.WebApp
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            //services.AddDbContext<FlightPricesContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
