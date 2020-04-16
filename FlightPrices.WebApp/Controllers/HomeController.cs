@@ -31,14 +31,35 @@ namespace FlightPrices.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var airports = await MakeHTTPRequest<AirportsPayload>("airports");
+            var airportsPayload = 
+                await MakeHTTPGetRequest<AirportsPayload>("airports");
 
-            return View();
+            var airports = airportsPayload.Airports;
+
+            var viewModel = new HomeSearchViewModel
+            {
+                Airports = airports
+            };
+
+            return View(viewModel);
+        }
+
+        public async Task<IList<string>> GetAirportNames()
+        {
+            var airports = await MakeHTTPGetRequest<AirportsPayload>("airports");
+
+            return airports.Airports.Select(a => a.AirportName).ToList();
         }
 
         [HttpPost]
-        public IActionResult Search(HomeSearchViewModel searchForm)
+        public async Task<IActionResult> Search(HomeSearchViewModel searchForm)
         {
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("originAirport", searchForm.OriginAiport)
+            });
+
+            var response = await MakeHTTPPostRequest<HttpResponse>("browsequotes/direct", content);
 
             return View("Flights");
         }
@@ -63,7 +84,7 @@ namespace FlightPrices.WebApp.Controllers
             return httpClient;
         }
 
-        private async Task<T> MakeHTTPRequest<T>(string url)
+        private async Task<T> MakeHTTPGetRequest<T>(string url)
         {
             var httpClient = GetHttpClient();
             var response = await httpClient.GetAsync(url);
@@ -72,5 +93,19 @@ namespace FlightPrices.WebApp.Controllers
 
             return JsonConvert.DeserializeObject<T>(json);
         }
+
+        private async Task<T> MakeHTTPPostRequest<T>(string url, HttpContent postContent)
+        {
+            var httpClient = GetHttpClient();
+            var response = await httpClient.PostAsync(url, postContent);
+            var content = response.Content;
+            var json = content.ReadAsStringAsync().Result;
+
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
+
+
+
     }
 }

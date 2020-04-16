@@ -8,15 +8,15 @@ namespace FlightPrices.WebApp.ViewModels.Home
 {
     public class HomeSearchViewModel
     {
-        public Airports OriginAiport { get; set; }
+        public string OriginAiport { get; set; }
 
-        public Airports DestinationAirport { get; set; }
+        public string DestinationAirport { get; set; }
 
-        public DateTime TakeOffDate { get; set; }
+        public DateTime? TakeOffDate { get; set; }
 
         public DateTime? ReturnDate { get; set; }
 
-        public bool IsRoundTrip { get; set; }
+        public bool IsRoundTrip { get; set; } = false;
 
         public IList<Airports> Airports { get; set; }
     }

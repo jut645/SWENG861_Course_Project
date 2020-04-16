@@ -2322,6 +2322,7 @@
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "3.1.1",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.1",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "3.1.1",
           "Unirest-API": "1.0.7.6"
         },
         "runtime": {

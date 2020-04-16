@@ -14,10 +14,10 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
     [Route("[controller]")]
     public class AirportsController
     {
-        private readonly ILogger<CurrenciesController> _logger;
+        private readonly ILogger<AirportsController> _logger;
         private readonly ISkyscannerClient _client;
 
-        public AirportsController(ILogger<CurrenciesController> logger,
+        public AirportsController(ILogger<AirportsController> logger,
             ISkyscannerClient client)
         {
             _logger = logger;

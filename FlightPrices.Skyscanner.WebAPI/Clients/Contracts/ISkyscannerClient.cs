@@ -8,8 +8,6 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients.Contracts
 {
     public interface ISkyscannerClient
     {
-        Task<IList<Currency>> GetCurrencies();
-
         Task<IList<Flight>> GetRoundTripFlights(string OriginAirportName,
             string DestintationAiportName,
             DateTime DepartureDate,
