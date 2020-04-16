@@ -1,61 +1,44 @@
-﻿@{
+﻿@model FlightPrices.WebApp.ViewModels.Home.HomePageQuotesViewModel
+
+@{
     ViewData["Title"] = "Flights";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<table id="flights" 
-       class="table table-striped table-bordered" 
-       style="width:100%">
+<table id="flights"
+        class="table table-striped table-bordered"
+        style="width:100%">
     <thead>
         <tr>
             <th>Airline</th>
-            <th>Departure Duration</th>
-            <th>Return Duration</th>
             <th>Price</th>
             <th>Departure Takeoff Time</th>
-            <th>Departure Arrival Time</th>
-            <th>Return Takeoff Time</th>
-            <th>Return Arrival Time</th>
-            <th>Number of Stops</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Spirit</td>
-            <td>2h 31m</td>
-            <td>2h 15m</td>
-            <td>$350</td>
-            <td>12:31pm</td>
-            <td>3:02pm</td>
-            <td>12:30pm</td>
-            <td>2:45pm</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>JetBlue</td>
-            <td>3h 31m</td>
-            <td>2h 30m</td>
-            <td>$550</td>
-            <td>12:00pm</td>
-            <td>3:31pm</td>
-            <td>1:00pm</td>
-            <td>3:30pm</td>
-            <td>0</td>
-        </tr>
+        @foreach (var quote in Model.Quotes)
+        {
+            <tr>
+                <td>@quote.Airline</td>
+                <td>@quote.Cost.Value</td>
+                <td>@quote.DepartureTakeoffTime</td>
+            </tr>
+
+        }
     </tbody>
+
 </table>
 
 @section scripts
 {
     <script>
-        $(document).ready(function() 
-        {
+        $(document).ready(function () {
             $('#flights').DataTable(
-            {
-                "bInfo" : false,
-                "pageLength": 5,
-                "bLengthChange": false,
-            });
+                {
+                    "bInfo": false,
+                    "pageLength": 5,
+                    "bLengthChange": false,
+                });
         });
     </script>
 }

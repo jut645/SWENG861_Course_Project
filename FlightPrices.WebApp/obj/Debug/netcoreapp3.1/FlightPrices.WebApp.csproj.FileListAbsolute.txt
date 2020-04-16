@@ -150,8 +150,6 @@ C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Map\Index.cshtml.g.cs
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Flights.cshtml.g.cs
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.exe
@@ -165,3 +163,6 @@ C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.pdb
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.xml
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\FlightPrices.Skyscanner.WebAPI.dll.config
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\bin\Debug\netcoreapp3.1\RestSharp.dll
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.MvcApplicationPartsAssemblyInfo.cache

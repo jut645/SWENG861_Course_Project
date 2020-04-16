@@ -14,6 +14,7 @@ using System.Net.Http;
 using FlightPrices.Skyscanner.WebAPI.Models;
 using Newtonsoft.Json;
 using FlightPrices.WebApp.Payloads;
+using RestSharp;
 
 namespace FlightPrices.WebApp.Controllers
 {
@@ -54,14 +55,19 @@ namespace FlightPrices.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(HomeSearchViewModel searchForm)
         {
-            var content = new FormUrlEncodedContent(new[]
+            string url = $"https://localhost:44320/browsequotes/direct?" +
+                $"originAirportName={searchForm.OriginAiport}" +
+                $"&destinationAirportName={searchForm.DestinationAirport}" + 
+                $"&departureDate={searchForm.TakeOffDate.Value.ToString("yyyy-MM-dd")}";
+
+            var quotesResponse = await MakeHTTPGetRequest<BrowseQuotesPayload>(url);
+
+            var viewModel = new HomePageQuotesViewModel
             {
-                new KeyValuePair<string, string>("originAirport", searchForm.OriginAiport)
-            });
+                Quotes = quotesResponse.Quotes
+            };
 
-            var response = await MakeHTTPPostRequest<HttpResponse>("browsequotes/direct", content);
-
-            return View("Flights");
+            return View("Flights", viewModel);
         }
 
         public IActionResult Privacy()

@@ -25,12 +25,13 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]/direct")]
-        public string Get(string OriginAirportName, string DestinationAirportName, DateTime DepartureDate)
+        [Route("direct")]
+        public async Task<string> Post(string OriginAirportName, string DestinationAirportName, DateTime DepartureDate)
         {
-            _client.GetOneWayFlights(OriginAirportName, DestinationAirportName, DepartureDate);
+            var quotes = await _client.GetOneWayFlights(OriginAirportName, DestinationAirportName, DepartureDate);
+            var payload = new { quotes = quotes };
 
-            return "";
+            return JsonConvert.SerializeObject(payload);
         }
     }
 }

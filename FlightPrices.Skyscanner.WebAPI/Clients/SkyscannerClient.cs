@@ -50,9 +50,9 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         public async Task<IList<Flight>> GetOneWayFlights(string OriginAirportName, string DestintationAiportName, DateTime DepartureDate)
         {
             var url = BuildUrl(OriginAirportName, DestintationAiportName, DepartureDate);
-            var response = MakeHTTPRequest<BrowseQuotesResponse>(url);
+            var response = await MakeHTTPRequest<BrowseQuotesResponse>(url);
 
-            return new List<Flight>();
+            return BuildFlightsFromBrowseQuotesResponse(response);
         }
 
         private string BuildUrl(string OriginAirportName, string DestinationAiportName, DateTime DepartureDate)
@@ -64,7 +64,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
             var destinationId = destinationAirport.SkyscannerPlaceId;
             var outboundDate = DepartureDate.ToString("yyyy-MM-dd");
 
-            return $"apiservices/browseroutes/v1.0/US/USD/en-US/{originId}/{destinationId}/{outboundDate}";
+            return $"apiservices/browsequotes/v1.0/US/USD/en-US/{originId}/{destinationId}/{outboundDate}";
 
 
         }
@@ -90,7 +90,31 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
 
         private IList<Flight> BuildFlightsFromBrowseQuotesResponse(BrowseQuotesResponse response)
         {
-            return new List<Flight>();
+            var carriers = response.Carriers.ToDictionary(c => c.CarrierId, c => c.Name);
+            var flights = new List<Flight>();
+            
+            foreach (var quote in response.Quotes)
+            {
+                var carrierId = quote.OutboundLeg.CarrierIds.Single();
+                var airline = carriers[carrierId];
+                var cost = new Money(Convert.ToDecimal(quote.MinPrice), 
+                    CurrencyType.UnitedStatesOfAmericaDollar);
+                var departureTakeoffTime = quote.OutboundLeg.DepartureDate;
+
+                var flight = new Flight
+                {
+                    Airline = airline,
+                    Cost = cost,
+                    NumberOfStops = 0,
+                    ReturnTakeoffTime = null,
+                    ReturnArrivalTime = null,
+                    DepartureTakeoffTime = departureTakeoffTime
+                };
+
+                flights.Add(flight);
+            }
+
+            return flights;
 
         }
 
