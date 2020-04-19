@@ -15,5 +15,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Responses
         public IList<Place> Places { get; set; }
 
         public IList<Quote> Quotes { get; set; }
+
+        public bool IsRoundTrip { get; set; }
     }
 }

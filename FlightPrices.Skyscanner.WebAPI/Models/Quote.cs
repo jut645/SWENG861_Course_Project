@@ -16,5 +16,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Models
         public DateTime QuoteDateTime { get; set; }
 
         public Leg OutboundLeg { get; set; }
+
+        public Leg InboundLeg { get; set; }
     }
 }

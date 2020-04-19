@@ -9,14 +9,14 @@ namespace FlightPrices.Skyscanner.WebAPI.Models
     {
         public Money Cost { get; set; }
 
+        public string DepartureAirline { get; set; }
+
         public DateTime DepartureTakeoffTime { get; set; }
+
+        public string ReturnAirline { get; set; }
 
         public DateTime? ReturnTakeoffTime { get; set; }
 
-        public DateTime? ReturnArrivalTime { get; set; }
-
-        public string Airline { get; set; }
-
-        public int NumberOfStops { get; set; }
+        public bool IsDirect { get; set; }
     }
 }

@@ -55,10 +55,46 @@ namespace FlightPrices.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(HomeSearchViewModel searchForm)
         {
-            string url = $"https://localhost:44320/browsequotes/direct?" +
+
+            if (!searchForm.ReturnDate.HasValue && !searchForm.IsRoundTrip)
+            {
+                return await GetOneWayFlights(searchForm);
+            }
+            else if (searchForm.ReturnDate.HasValue && searchForm.IsRoundTrip)
+            {
+                return await GetRoundTripFlights(searchForm);
+            }
+            else
+            {
+                throw new Exception("Invalid form.");
+            }
+
+        }
+
+        private async Task<IActionResult> GetOneWayFlights(HomeSearchViewModel searchForm)
+        {
+            string url = $"https://localhost:44320/browsequotes/oneWay?" +
                 $"originAirportName={searchForm.OriginAiport}" +
-                $"&destinationAirportName={searchForm.DestinationAirport}" + 
+                $"&destinationAirportName={searchForm.DestinationAirport}" +
                 $"&departureDate={searchForm.TakeOffDate.Value.ToString("yyyy-MM-dd")}";
+
+            var quotesResponse = await MakeHTTPGetRequest<BrowseQuotesPayload>(url);
+
+            var viewModel = new HomePageQuotesViewModel
+            {
+                Quotes = quotesResponse.Quotes
+            };
+
+            return View("Flights", viewModel);
+        }
+
+        private async Task<IActionResult> GetRoundTripFlights(HomeSearchViewModel searchForm)
+        {
+            string url = $"https://localhost:44320/browsequotes/roundTrip?" +
+                $"originAirportName={searchForm.OriginAiport}" +
+                $"&destinationAirportName={searchForm.DestinationAirport}" +
+                $"&departureDate={searchForm.TakeOffDate.Value.ToString("yyyy-MM-dd")}" +
+                $"&returnDate={searchForm.ReturnDate.Value.ToString("yyyy-MM-dd")}";
 
             var quotesResponse = await MakeHTTPGetRequest<BrowseQuotesPayload>(url);
 
