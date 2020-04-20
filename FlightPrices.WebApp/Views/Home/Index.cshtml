@@ -4,39 +4,39 @@
     ViewData["Title"] = "Home Page";
 }
 
-@using (Html.BeginForm(actionName: "Search", controllerName: "Home", 
-            method: FormMethod.Post))
+@using (Html.BeginForm(actionName: "Search", 
+                       controllerName: "Home", 
+                       method: FormMethod.Get, 
+                       new 
+                       {
+                           id = "flightPriceForm"
+                       }))
 {
     <div class="form-group">
         <label for="origin">
             Where From?
         </label>
-        <input type="text" 
-               class="form-control" 
-               id="origin" 
-               aria-describedby="origin-help" 
+        <input type="text"
+               class="form-control"
+               id="origin"
+               aria-describedby="origin-help"
                placeholder="Select Origin"
-               value=""
-               asp-for="OriginAiport"/>
-        <small id="origin-help" 
-               class="form-text text-muted">
-            This is the aiport you'll depart from.
-        </small>
+               asp-for="OriginAirport" />
+        @Html.ValidationMessageFor(model => model.OriginAirport, "", new { @class = "text-danger" })
+
     </div>
     <div class="form-group">
         <label for="destination">
             Where To?
         </label>
-        <input type="text" 
-               class="form-control" 
-               id="destination" 
-               aria-describedby="destination-help" 
+        <input type="text"
+               class="form-control"
+               id="destination"
+               aria-describedby="destination-help"
                placeholder="Select Destination"
-               asp-for="DestinationAirport"/>
-        <small id="destination-help" 
-               class="form-text text-muted">
-            This is the aiport you'll arrive at.
-        </small>
+               asp-for="DestinationAirport" />
+        @Html.ValidationMessageFor(model => model.DestinationAirport, "", new { @class = "text-danger" })
+
     </div>
     <div class="form-group">
         <div>
@@ -44,9 +44,12 @@
                 When Do You Want To Leave?
             </label>
         </div>
-        <input id="departure-date" 
+        <input id="departure-date"
                type="date"
-               asp-for="TakeOffDate"/>
+               asp-for="TakeOffDate"
+               min="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+        <div></div>
+        @Html.ValidationMessageFor(model => model.TakeOffDate, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
         <div>
@@ -54,22 +57,24 @@
                 When Do You Want To Return?
             </label>
         </div>
-        <input id="return-date" 
+        <input id="return-date"
                type="date"
                asp-for="ReturnDate"
-               disabled/>
+               min="@DateTime.Now.ToString("yyyy-MM-dd")"
+               disabled />
     </div>
     <div class="form-check">
-        <input type="checkbox" 
-               class="form-check-input" 
+        <input type="checkbox"
+               class="form-check-input"
                id="round-trip"
-               asp-for="IsRoundTrip"/>
-        <label class="form-check-label" 
+               asp-for="IsRoundTrip" />
+        @Html.ValidationMessageFor(model => model.IsRoundTrip, "", new { @class = "text-danger" })
+        <label class="form-check-label"
                for="round-trip">
             Round Trip
         </label>
     </div>
-    <button type="submit" 
+    <button type="submit"
             class="btn btn-primary">
         Submit
     </button>
@@ -80,19 +85,17 @@
     <script>
         $('#round-trip').click(function () {
 
-            if ($('#round-trip').prop("checked"))
-            {
+            if ($('#round-trip').prop("checked")) {
                 $("#return-date").prop('disabled', false);
             }
-            else
-            {
+            else {
                 $("#return-date").prop('disabled', true);
             }
         });
     </script>
 
     <script>
-        $(document).ready(function () 
+        $(document).ready(function ()
         {
             let airports = @Html.Raw(Json.Serialize(@Model.Airports));
             let airportNames = airports.map(a => a.airportName);
@@ -101,10 +104,26 @@
             {
                 source: airportNames
             });
+
+            $("#departure-date").change(function() 
+            {
+                let departureValue = $("#departure-date").val();
+                let departureDate = Date.parse(departureValue);
+
+                if (!document.getElementById("return-date").disabled)
+                {
+                    let returnValue = $("#return-date").val();
+                    let returnDate = Date.parse(returnValue);
+
+                    if (returnDate < departureDate)
+                    {
+                        document.getElementById("return-date").value = departureValue;
+                    }
+                }
+
+                document.getElementById("return-date").setAttribute("min", departureValue);
+
+            })
         });
-
-
-
-
     </script>
 }

@@ -10,19 +10,35 @@
         style="width:100%">
     <thead>
         <tr>
-            <th>Airline</th>
             <th>Price</th>
+            <th>Departure Airline</th>
             <th>Departure Takeoff Time</th>
+
+            @if (Model.IsRoundTrip)
+            {
+                <th>Return Airline</th>
+                <th>Return Takeoff Time</th>
+            }
+
+            <th>Direct</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var quote in Model.Quotes)
         {
-            <tr>
-                <td>@quote.Airline</td>
-                <td>@quote.Cost.Value</td>
-                <td>@quote.DepartureTakeoffTime</td>
-            </tr>
+        <tr>
+            <td>@quote.Cost.Value</td>
+            <td>@quote.DepartureAirline</td>
+            <td>@quote.DepartureTakeoffTime</td>
+
+            @if (Model.IsRoundTrip)
+            {
+                <td>@quote.ReturnAirline</td>
+                <td>@quote.ReturnTakeoffTime</td>
+            }
+
+            <td>@quote.IsDirect</td>
+        </tr>
 
         }
     </tbody>

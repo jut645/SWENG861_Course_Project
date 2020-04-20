@@ -106,12 +106,6 @@
                 </remarks>
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.BuildFlightsFromBrowseQuotesResponse(FlightPrices.Skyscanner.WebAPI.Responses.BrowseQuotesResponse)">
-            <summary>
-                Maps the Skyscanner API reponse for quotes to a collection of individual quotes.
-                <param name="response">The Browse Quotes response from the Skyscanner API.</param>
-            </summary>
-        </member>
         <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.GetHttpClient">
             <summary>
                 Gets an HTTP Client from the IHttpClientFactory instance and configures it.

@@ -32,10 +32,7 @@ namespace FlightPrices.WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var airportsPayload = 
-                await MakeHTTPGetRequest<AirportsPayload>("airports");
-
-            var airports = airportsPayload.Airports;
+            var airports = await GetAirports();
 
             var viewModel = new HomeSearchViewModel
             {
@@ -52,9 +49,14 @@ namespace FlightPrices.WebApp.Controllers
             return airports.Airports.Select(a => a.AirportName).ToList();
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Search(HomeSearchViewModel searchForm)
         {
+            if (!ModelState.IsValid)
+            {
+                searchForm.Airports = await GetAirports();
+                return View("Index", searchForm);
+            }
 
             if (!searchForm.ReturnDate.HasValue && !searchForm.IsRoundTrip)
             {
@@ -71,10 +73,17 @@ namespace FlightPrices.WebApp.Controllers
 
         }
 
+        private async Task<IList<Airports>> GetAirports()
+        {
+            var airportsPayload = await MakeHTTPGetRequest<AirportsPayload>("airports");
+
+            return airportsPayload.Airports;
+        }
+
         private async Task<IActionResult> GetOneWayFlights(HomeSearchViewModel searchForm)
         {
             string url = $"https://localhost:44320/browsequotes/oneWay?" +
-                $"originAirportName={searchForm.OriginAiport}" +
+                $"originAirportName={searchForm.OriginAirport}" +
                 $"&destinationAirportName={searchForm.DestinationAirport}" +
                 $"&departureDate={searchForm.TakeOffDate.Value.ToString("yyyy-MM-dd")}";
 
@@ -82,7 +91,8 @@ namespace FlightPrices.WebApp.Controllers
 
             var viewModel = new HomePageQuotesViewModel
             {
-                Quotes = quotesResponse.Quotes
+                Quotes = quotesResponse.Quotes,
+                IsRoundTrip = false
             };
 
             return View("Flights", viewModel);
@@ -91,7 +101,7 @@ namespace FlightPrices.WebApp.Controllers
         private async Task<IActionResult> GetRoundTripFlights(HomeSearchViewModel searchForm)
         {
             string url = $"https://localhost:44320/browsequotes/roundTrip?" +
-                $"originAirportName={searchForm.OriginAiport}" +
+                $"originAirportName={searchForm.OriginAirport}" +
                 $"&destinationAirportName={searchForm.DestinationAirport}" +
                 $"&departureDate={searchForm.TakeOffDate.Value.ToString("yyyy-MM-dd")}" +
                 $"&returnDate={searchForm.ReturnDate.Value.ToString("yyyy-MM-dd")}";
@@ -100,7 +110,8 @@ namespace FlightPrices.WebApp.Controllers
 
             var viewModel = new HomePageQuotesViewModel
             {
-                Quotes = quotesResponse.Quotes
+                Quotes = quotesResponse.Quotes,
+                IsRoundTrip = true
             };
 
             return View("Flights", viewModel);
