@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using FlightPrices.WebApp.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 using FlightPrices.WebApp.ViewModels.Home;
-using FlightPrices.Skyscanner.WebAPI.Clients.Contracts;
 using System.Net.Http;
 using FlightPrices.Skyscanner.WebAPI.Models;
 using Newtonsoft.Json;
 using FlightPrices.WebApp.Payloads;
-using RestSharp;
 
 namespace FlightPrices.WebApp.Controllers
 {
@@ -23,8 +18,7 @@ namespace FlightPrices.WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public HomeController(ILogger<HomeController> logger,
-            IHttpClientFactory factory)
+        public HomeController(ILogger<HomeController> logger, IHttpClientFactory factory)
         {
             _logger = logger;
             _httpClientFactory = factory;
@@ -52,9 +46,21 @@ namespace FlightPrices.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(HomeSearchViewModel searchForm)
         {
+            var airports = await GetAirports();
+
+            if (!airports.Select(a => a.AirportName).Contains(searchForm.OriginAirport))
+            {
+                ModelState.AddModelError("OriginAirport", "Invalid airport name");
+            }
+
+            if (!airports.Select(a => a.AirportName).Contains(searchForm.DestinationAirport))
+            {
+                ModelState.AddModelError("DestinationAirport", "Invalid airport name");
+            }
+
             if (!ModelState.IsValid)
             {
-                searchForm.Airports = await GetAirports();
+                searchForm.Airports = airports;
                 return View("Index", searchForm);
             }
 
@@ -73,7 +79,7 @@ namespace FlightPrices.WebApp.Controllers
 
         }
 
-        private async Task<IList<Airports>> GetAirports()
+        public async Task<IList<Airports>> GetAirports()
         {
             var airportsPayload = await MakeHTTPGetRequest<AirportsPayload>("airports");
 
@@ -117,17 +123,6 @@ namespace FlightPrices.WebApp.Controllers
             return View("Flights", viewModel);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
 
         private HttpClient GetHttpClient()
         {
@@ -146,19 +141,6 @@ namespace FlightPrices.WebApp.Controllers
 
             return JsonConvert.DeserializeObject<T>(json);
         }
-
-        private async Task<T> MakeHTTPPostRequest<T>(string url, HttpContent postContent)
-        {
-            var httpClient = GetHttpClient();
-            var response = await httpClient.PostAsync(url, postContent);
-            var content = response.Content;
-            var json = content.ReadAsStringAsync().Result;
-
-            return JsonConvert.DeserializeObject<T>(json);
-        }
-
-
-
 
     }
 }

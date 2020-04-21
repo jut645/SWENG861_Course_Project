@@ -13,5 +13,22 @@ namespace FlightPrices.Skyscanner.WebAPI.Models
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public string SkyscannerPlaceId { get; set; }
+
+        public static bool operator==(Airports airportLeft, Airports airportRight)
+        {
+            return airportLeft.AirportId == airportRight.AirportId &&
+                   airportLeft.AirportName == airportRight.AirportName &&
+                   airportLeft.City == airportRight.City &&
+                   airportLeft.Country == airportRight.Country &&
+                   airportLeft.IataCode == airportRight.IataCode &&
+                   airportLeft.Latitude == airportRight.Latitude &&
+                   airportLeft.Longitude == airportRight.Longitude &&
+                   airportLeft.SkyscannerPlaceId == airportRight.SkyscannerPlaceId;
+        }
+
+        public static bool operator !=(Airports airportLeft, Airports airportRight)
+        {
+            return !(airportLeft == airportRight);
+        }
     }
 }

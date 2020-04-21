@@ -1,30 +1,27 @@
 {
-  "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:56949",
-      "sslPort": 44320
+      "applicationUrl": "http://localhost:5000",
+      "sslPort": 44353
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "listmarkets",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "FlightPrices.Skyscanner.WebAPI": {
+    "FlightPrices.WebApp": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "listmarkets",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }

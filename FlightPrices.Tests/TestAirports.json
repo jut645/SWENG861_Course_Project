@@ -1,0 +1,15 @@
+{
+  "airports":
+  [
+    {
+      "AirportId": 1,
+      "AirportName": "Goroka Airport",
+      "City": "Goroka",
+      "Country": "Papua New Guinea",
+      "IataCode": "GKA",
+      "Latitude": -6.0816898345900015,
+      "Longitude": 145.391998291,
+      "SkyscannerPlaceId": "GKA-sky"
+    }
+  ]
+}

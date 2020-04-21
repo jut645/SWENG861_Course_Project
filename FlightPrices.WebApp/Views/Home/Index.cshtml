@@ -4,13 +4,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-@using (Html.BeginForm(actionName: "Search", 
-                       controllerName: "Home", 
-                       method: FormMethod.Get, 
-                       new 
-                       {
-                           id = "flightPriceForm"
-                       }))
+@using (Html.BeginForm(actionName: "Search",
+                     controllerName: "Home",
+                     method: FormMethod.Get,
+                     new
+                     {
+                         id = "flightPriceForm"
+                     }))
 {
     <div class="form-group">
         <label for="origin">
@@ -47,7 +47,7 @@
         <input id="departure-date"
                type="date"
                asp-for="TakeOffDate"
-               min="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+               min="@DateTime.Now.ToString("yyyy-MM-dd")" />
         <div></div>
         @Html.ValidationMessageFor(model => model.TakeOffDate, "", new { @class = "text-danger" })
     </div>
@@ -105,7 +105,7 @@
                 source: airportNames
             });
 
-            $("#departure-date").change(function() 
+            $("#departure-date").change(function()
             {
                 let departureValue = $("#departure-date").val();
                 let departureDate = Date.parse(departureValue);
