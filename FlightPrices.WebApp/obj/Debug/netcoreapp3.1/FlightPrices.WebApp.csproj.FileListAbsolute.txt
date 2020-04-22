@@ -166,3 +166,4 @@ C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.csproj.CopyComplete
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.dll
 C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\FlightPrices.WebApp.pdb
+C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\HttpErrorPage.cshtml.g.cs

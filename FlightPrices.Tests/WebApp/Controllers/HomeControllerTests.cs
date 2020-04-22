@@ -15,49 +15,166 @@ using Xunit;
 
 namespace FlightPrices.Tests.WebApp.Controllers
 {
+    /// <summary>
+    ///     Class <c>HomeControllerTests</c> is responsible for testing the <c>Home Controller</c> controller.
+    /// </summary>
     public class HomeControllerTests
     {
-        private HomeController _testContext;
-
-        public HomeControllerTests()
+        /// <summary>
+        ///     Tests the HomeController.Index method to ensure that it successfully returns a ViewResult
+        ///     that contains the Airports served the by HttpClient from the IHttpClientFactory.
+        ///     <remarks>
+        ///         Tests with a single airport for simplicity.
+        ///     </remarks>
+        /// </summary>
+        [Fact]
+        public async void TestIndexSuccessfullyImportsAirports()
         {
+            // Initialize test objects.
             var logger = ILoggerMockFactory.Build<HomeController>();
             var factory = IHttpClientFactoryMockFactory.Build(GetSuccessfulAirportsPayload());
+            var testContext = new HomeController(logger, factory);
 
-            _testContext = new HomeController(logger: logger, factory: factory);
-        }
+            // Run the index method and cast result
+            var actionResult = await testContext.Index() as ViewResult;
 
-        [Fact]
-        public async void TestIndex()
-        {
-            var actionResult = await _testContext.Index() as ViewResult;
+            // Get the ViewResult view model
             var viewModel = actionResult.ViewData.Model as HomeSearchViewModel;
-    
+
+            // Test successful casting
+            Assert.NotNull(actionResult);
+            Assert.NotNull(viewModel);
+
+            // Test that it successfully imported the test airport
             Assert.True(TestAirport == viewModel.Airports[0]);
         }
 
+        /// <summary>
+        ///     Tests the HomeController.Index method to ensure that it can handle an exception being thrown by
+        ///     the HttpClient from the IHttpClientFactory.
+        ///     <remarks>
+        ///         Tests with a generic Exception for simplicity.
+        ///     </remarks>
+        /// </summary>
+        [Fact]
+        public async void TestIndexHandlesHttpClientException()
+        {
+            // Initialize test objects.
+            var logger = ILoggerMockFactory.Build<HomeController>();
+            var factory = IHttpClientFactoryMockFactory.Build(new Exception());
+            var testContext = new HomeController(logger, factory);
+
+            // Run the index method and cast result
+            var actionResult = await testContext.Index() as ViewResult;
+
+            // Test that the Controller redirects user to the HttpErrorPage
+            Assert.NotNull(actionResult);
+            Assert.Equal("HttpErrorPage", actionResult.ViewName);
+        }
+
+        /// <summary>
+        ///     Tests the HomeController.Index method to ensure that it can handle empty results from
+        ///     the HttpClient from the IHttpClientFactory.
+        /// </summary>
+        [Fact]
+        public async void TestIndexHandlesEmptyResult()
+        {
+            // Initialize test objects.
+            var logger = ILoggerMockFactory.Build<HomeController>();
+            var factory = IHttpClientFactoryMockFactory.Build(GetEmptyAirportsPayload());
+            var testContext = new HomeController(logger, factory);
+
+            // Run the index method and cast result
+            var actionResult = await testContext.Index() as ViewResult;
+
+            // Get the viewModel and cast it
+            var viewModel = actionResult.ViewData.Model as HomeSearchViewModel;
+
+            // Test successful casting
+            Assert.NotNull(actionResult);
+            Assert.NotNull(viewModel);
+
+            // Test that it successfully imported the empty payload
+            Assert.True(viewModel.Airports.Count == 0);
+        }
+
+        /// <summary>
+        ///     Tests the HomeController.GetAirports method to ensure it successfully retrieves the airports from 
+        ///     the HttpClient from the IHttpClientFactory.
+        /// </summary>
         [Fact]
         public async void TestGetAirports()
         {
-            var airports = await _testContext.GetAirports();
+            // Initialize test objects.
+            var logger = ILoggerMockFactory.Build<HomeController>();
+            var factory = IHttpClientFactoryMockFactory.Build(GetSuccessfulAirportsPayload());
+            var testContext = new HomeController(logger, factory);
+
+            // Invoke the GetAirports method
+            var airports = await testContext.GetAirports();
+
+            // Check for instance equality using operator overload
             var equal = TestAirport == airports[0];
 
             Assert.True(equal);
-
         }
 
+        /// <summary>
+        ///     Tests the HomeController.GetAirports method to ensure it successfully retrieves an empty
+        ///     airports payload from the HttpClient.
+        /// </summary>
         [Fact]
-        public async void TestGetAirportNames()
+        public async void TestGetAirportsEmpty()
         {
-            var airportNames = await _testContext.GetAirportNames();
-            var equal = TestAirport.AirportName == airportNames[0];
+            // Initialize test objects.
+            var logger = ILoggerMockFactory.Build<HomeController>();
+            var factory = IHttpClientFactoryMockFactory.Build(GetEmptyAirportsPayload());
+            var testContext = new HomeController(logger, factory);
 
-            Assert.True(equal);
+            // Invoke the GetAirports method
+            var airports = await testContext.GetAirports();
+
+            Assert.True(airports.Count == 0);
         }
+
+        /// <summary>
+        ///     Tests the HomeController.Search method for one way flights
+        /// </summary>
+        [Fact]
+        public async void TestSearchOneWay()
+        {
+            // Initialize test objects.
+            var logger = ILoggerMockFactory.Build<HomeController>();
+            var factory = IHttpClientFactoryMockFactory.Build(GetEmptyAirportsPayload());
+            var testContext = new HomeController(logger, factory);
+
+            // Invoke the GetAirports method
+            var airports = await testContext.GetAirports();
+
+            Assert.True(airports.Count == 0);
+        }
+
+
 
         private string GetSuccessfulAirportsPayload()
         {
             using (StreamReader reader = new StreamReader("../../../TestAirports.json"))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+        private string GetEmptyAirportsPayload()
+        {
+            using (StreamReader reader = new StreamReader("../../../EmptyAirports.json"))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
+        private string GetOneWayFlightsPayload()
+        {
+            using (StreamReader reader = new StreamReader("../../../OneWayFlights.json"))
             {
                 return reader.ReadToEnd();
             }

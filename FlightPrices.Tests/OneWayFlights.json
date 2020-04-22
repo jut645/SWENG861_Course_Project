@@ -1,0 +1,16 @@
+{
+  "quotes": 
+  [
+    {
+      "cost": {
+        "value": 200,
+        "currencyType": 1
+      },
+      "departureAirline": "Jacksonville International Airport",
+      "departureTakeoffTime": "2020-05-23",
+      "returnAirline": null,
+      "returnTakeoffTime": null,
+      "isDirect": true
+    }
+  ]
+}

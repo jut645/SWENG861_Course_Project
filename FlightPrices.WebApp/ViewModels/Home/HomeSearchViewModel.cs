@@ -36,6 +36,18 @@ namespace FlightPrices.WebApp.ViewModels.Home
                     new[] { "DestinationAirport", "OriginAirport" }));
             }
 
+            if (IsRoundTrip && !ReturnDate.HasValue)
+            {
+                results.Add(new ValidationResult("If the flight is round trip, then you must enter a return date.",
+                    new[] { "IsRoundTrip", "ReturnDate" }));
+            }
+
+            if (!IsRoundTrip && ReturnDate.HasValue)
+            {
+                results.Add(new ValidationResult("If the return date is specified, the flight must be round trip.",
+                    new[] { "IsRoundTrip", "ReturnDate" }));
+            }
+
             return results;
         }
     }

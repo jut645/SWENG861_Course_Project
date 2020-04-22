@@ -32,5 +32,22 @@ namespace FlightPrices.Tests.Mocks
 
             return mockFactory.Object;
         }
+
+        public static IHttpClientFactory Build(Exception exception)
+        {
+            var mockFactory = new Mock<IHttpClientFactory>();
+
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                                                  ItExpr.IsAny<HttpRequestMessage>(),
+                                                  ItExpr.IsAny<CancellationToken>())
+                .Throws(exception);
+
+            var client = new HttpClient(mockHttpMessageHandler.Object);
+            mockFactory.Setup(_ => _.CreateClient(It.IsAny<string>())).Returns(client);
+
+            return mockFactory.Object;
+        }
     }
 }
