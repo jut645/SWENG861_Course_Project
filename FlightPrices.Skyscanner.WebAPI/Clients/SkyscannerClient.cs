@@ -179,6 +179,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
             // Set configuration
             httpClient.BaseAddress = new Uri(_skyscannerBaseUrl);
             httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _apiKey);
+            httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com");
 
             return httpClient;
         }

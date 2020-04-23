@@ -14,7 +14,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
             var destinationId = destination.SkyscannerPlaceId;
             var outboundDate = departureDate.ToString("yyyy-MM-dd");
 
-            return $"apiservices/browsequotes/v1.0/US/USD/en-US/{originId}/{destinationId}/{outboundDate}";
+            return $"apiservices/browseroutes/v1.0/US/USD/en-US/{originId}/{destinationId}/{outboundDate}";
         }
 
         public static string BuildRoundTripFlightUrl(
@@ -28,7 +28,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
             var outboundDate = departureDate.ToString("yyyy-MM-dd");
             var inboundDate = returnDate.ToString("yyyy-MM-dd");
 
-            return $"apiservices/browsequotes/v1.0/US/USD/en-US/" +
+            return $"apiservices/browseroutes/v1.0/US/USD/en-US/" +
                 $"{originId}/{destinationId}/{outboundDate}/{inboundDate}";
         }
 
