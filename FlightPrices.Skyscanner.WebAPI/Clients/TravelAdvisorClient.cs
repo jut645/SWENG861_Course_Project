@@ -1,6 +1,7 @@
 ﻿using FlightPrices.Skyscanner.WebAPI.Clients.Contracts;
 using FlightPrices.Skyscanner.WebAPI.Models;
 using FlightPrices.Skyscanner.WebAPI.Responses.TravelAdvisor;
+using FlightPrices.Skyscanner.WebAPI.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -35,7 +36,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
 
             Thread.Sleep(3000);    // Wait 3 seconds for poll to accumulate results on API side
 
-            return await PollCurrentSession(isRoundTrip: false);
+            return await PollCurrentSession();
         }
 
         public async Task<IList<Flight>> GetRoundTripFlights(string OriginAirportName, string DestintationAiportName, DateTime DepartureDate, DateTime ReturnDate)
@@ -44,191 +45,18 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
 
             Thread.Sleep(3000);    // Wait 3 seconds for poll to accumulate results on API side
 
-            return await PollCurrentSession(isRoundTrip: true);
+            return await PollCurrentSession();
         }
 
-        private async Task<IList<Flight>> PollCurrentSession(bool isRoundTrip)
+        private async Task<IList<Flight>> PollCurrentSession()
         {
             string url = $"flights/poll?sid={_sessionId}&currency=USD&n=15&ns=NON_STOP%252CONE_STOP&so=PRICE&o=0";
 
             var jsonResponse = await MakeHTTPRequestRaw(url);
 
-            var flights = !(isRoundTrip) ? GetQuoteDataFromJsonOneWay(jsonResponse) : 
-                GetQuoteDataFromJsonRoundTrip(jsonResponse);
+            var flightParser = new TripAdvisorPayloadParser(jsonResponse);
 
-            return flights;
-        }
-
-        private IList<Flight> GetQuoteDataFromJsonOneWay(string json)
-        {
-            var flights = new List<Flight>();
-
-            JToken token = JToken.Parse(json);
-            JArray itineraries = (JArray)token.SelectToken("itineraries");
-            JArray carriers = (JArray)token.SelectToken("carriers");
-
-            foreach (var itinerary in itineraries)
-            {
-                var flight = new Flight();
-
-                // Get best price
-                int cheapestPrice = GetCheapestPriceFromItinerary(itinerary);
-                flight.Cost = new Money(cheapestPrice, CurrencyType.UnitedStatesOfAmericaDollar);
-
-                // Determine if the flight is direct
-                bool isDirect = GetIsDirectFromItinerary(itinerary);
-                flight.IsDirect = isDirect;
-
-                // Get departure airline
-                string departureAirline = GetDepartureAirlineFromItinerary(itinerary, carriers);
-                flight.DepartureAirline = departureAirline;
-
-                // Get departure airline 
-                DateTime departureTakeoffTime = GetDepartureTimeFromItineary(itinerary);
-                flight.DepartureTakeoffTime = departureTakeoffTime;
-
-                flight.ReturnAirline = null;
-                flight.ReturnTakeoffTime = null;
-
-                flights.Add(flight);
-            }
-
-            return flights;
-        }
-
-        private IList<Flight> GetQuoteDataFromJsonRoundTrip(string json)
-        {
-            var flights = new List<Flight>();
-
-            JToken token = JToken.Parse(json);
-            JArray itineraries = (JArray)token.SelectToken("itineraries");
-            JArray carriers = (JArray)token.SelectToken("carriers");
-
-            foreach (var itinerary in itineraries)
-            {
-                var flight = new Flight();
-
-                // Get best price
-                int cheapestPrice = GetCheapestPriceFromItinerary(itinerary);
-                flight.Cost = new Money(cheapestPrice, CurrencyType.UnitedStatesOfAmericaDollar);
-
-                // Determine if the flight is direct
-                bool isDirect = GetIsDirectFromItinerary(itinerary);
-                flight.IsDirect = isDirect;
-
-                // Get departure airline
-                string departureAirline = GetDepartureAirlineFromItinerary(itinerary, carriers);
-                flight.DepartureAirline = departureAirline;
-
-                // Get departure airline 
-                DateTime departureTakeoffTime = GetDepartureTimeFromItineary(itinerary);
-                flight.DepartureTakeoffTime = departureTakeoffTime;
-
-                // Get return airline
-                string returnAirline = GetReturnAirlineFromItinerary(itinerary, carriers);
-                flight.ReturnAirline = returnAirline;
-
-                // Get return takeoff time
-                DateTime returnTime = GetReturnTimeFromItineary(itinerary);
-                flight.ReturnTakeoffTime = returnTime;
-
-                flights.Add(flight);
-            }
-
-            return flights;
-        }
-
-        private DateTime GetDepartureTimeFromItineary(JToken itinerary)
-        {
-            var flight = itinerary.SelectToken("f[0]");
-            var legs = (JArray)flight.SelectToken("l");
-            var firstLeg = legs.First();
-            var dateTime = firstLeg.SelectToken("dd").ToString();
-
-            return DateTime.Parse(dateTime);
-        }
-
-        private DateTime GetReturnTimeFromItineary(JToken itinerary)
-        {
-            var flight = itinerary.SelectToken("f[1]");
-            var legs = (JArray)flight.SelectToken("l");
-            var firstLeg = legs.Last();
-            var dateTime = firstLeg.SelectToken("ad").ToString();
-
-            return DateTime.Parse(dateTime);
-        }
-
-        private bool GetIsDirectFromItinerary(JToken itinerary)
-        {
-            var flight = itinerary.SelectToken("f[0]");
-            var legs = (JArray)flight.SelectToken("l");
-
-            return legs.Count == 1;
-        }
-
-        private string GetReturnAirlineFromItinerary(JToken itinerary, JArray carriers)
-        {
-            var flight = itinerary.SelectToken("f[1]");
-            var legs = (JArray)flight.SelectToken("l");
-            var lastLeg = legs.Last();
-            var carrierId = lastLeg.SelectToken("o").ToString();
-
-            foreach (var carrier in carriers)
-            {
-                var id = carrier.SelectToken("c").ToString();
-                if (id == carrierId)
-                {
-                    return carrier.SelectToken("n").ToString();
-                }
-            }
-
-            throw new ArgumentException($"Carrier {carrierId} not found.");
-        }
-
-        private string GetDepartureAirlineFromItinerary(JToken itinerary, JArray carriers)
-        {
-            var flight = itinerary.SelectToken("f[0]");
-            var legs = (JArray)flight.SelectToken("l");
-            var firstLeg = legs.First();
-            var carrierId = firstLeg.SelectToken("o").ToString();
-
-            foreach (var carrier in carriers)
-            {
-                var id = carrier.SelectToken("c").ToString();
-                if (id == carrierId)
-                {
-                    return carrier.SelectToken("n").ToString();
-                }
-            }
-
-            throw new ArgumentException($"Carrier {carrierId} not found.");
-        }
-
-        private int GetCheapestPriceFromItinerary(JToken itinerary)
-        {
-            var agents = itinerary.SelectToken("l");
-
-            // Get cheapest price
-            int cheapestPriceInDollars = int.MaxValue;
-            foreach (var agent in agents)
-            {
-                var priceInDollars = GetIntegerPriceFromAgentToken(agent);
-
-                if (priceInDollars < cheapestPriceInDollars)
-                {
-                    cheapestPriceInDollars = priceInDollars;
-                }
-            }
-
-            return cheapestPriceInDollars;
-        }
-
-        private int GetIntegerPriceFromAgentToken(JToken agent)
-        {
-            var priceJson = agent.SelectToken("pr.dp").ToString();
-            priceJson = priceJson.Replace("$", string.Empty);
-
-            return Convert.ToInt32(priceJson);
+            return flightParser.GetQuoteData();
         }
 
         private async Task CreateSession(string origin, string destination, DateTime DepartureDate)
@@ -237,9 +65,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
             var originAirport = GetAirportFromAirportName(origin);
             var destinationAirport = GetAirportFromAirportName(destination);
 
-            string url = $"flights/create-session?" +
-                $"currency=USD&ta=1&c=0&d1={destinationAirport.IataCode}&o1={originAirport.IataCode}" +
-                $"&dd1={DepartureDate.ToString("yyyy-MM-dd")}";
+            string url = TripAdvisorUrlBuilder.BuildSessionUrl(originAirport.IataCode,
+                destinationAirport.IataCode, DepartureDate);
 
             var response = await MakeHTTPRequest<CreateSessionResponse>(url);
 
@@ -252,31 +79,10 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
             var originAirport = GetAirportFromAirportName(origin);
             var destinationAirport = GetAirportFromAirportName(destination);
 
-            /*
-             * "https://tripadvisor1.p.rapidapi.com/flights/create-session?
-             * dd2=2020-05-03&
-             * currency=USD&
-             * o2=ORD&
-             * d2=SFO&
-             * ta=1&
-             * tc=11%252C5&
-             * c=0&
-             * d1=ORD&
-             * o1=SFO&
-             * dd1=2020-05-01"
-             * 
-             */
-
-            string url = $"flights/create-session?" +
-                $"dd2={ReturnDate.ToString("yyyy-MM-dd")}&" +
-                $"currency=USD&" +
-                $"o2={destinationAirport.IataCode}&" +
-                $"d2={originAirport.IataCode}&" + 
-                $"ta=1&" +
-                $"c=0&" +
-                $"d1={destinationAirport.IataCode}&" +
-                $"o1={originAirport.IataCode}&" +
-                $"dd1={DepartureDate.ToString("yyyy-MM-dd")}";
+            string url = TripAdvisorUrlBuilder.BuildSessionUrl(originAirport.IataCode,
+                destinationAirport.IataCode,
+                DepartureDate,
+                ReturnDate);
 
             var response = await MakeHTTPRequest<CreateSessionResponse>(url);
 
