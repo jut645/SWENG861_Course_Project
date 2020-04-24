@@ -156,8 +156,8 @@ namespace FlightPrices.WebApp.Controllers
         {
             // Construct the url based on the form
             string url = $"https://localhost:44320/browsequotes/oneWay?" +
-                $"originAirportName={searchForm.OriginAirport}" +
-                $"&destinationAirportName={searchForm.DestinationAirport}" +
+                $"origin={searchForm.OriginAirport}" +
+                $"&destination={searchForm.DestinationAirport}" +
                 $"&departureDate={searchForm.TakeOffDate.Value.ToString("yyyy-MM-dd")}";
 
             // Make the HTTP Get request
@@ -188,8 +188,8 @@ namespace FlightPrices.WebApp.Controllers
         {
             // Build the url based on the search form
             string url = $"https://localhost:44320/browsequotes/roundTrip?" +
-                $"originAirportName={searchForm.OriginAirport}" +
-                $"&destinationAirportName={searchForm.DestinationAirport}" +
+                $"origin={searchForm.OriginAirport}" +
+                $"&destination={searchForm.DestinationAirport}" +
                 $"&departureDate={searchForm.TakeOffDate.Value.ToString("yyyy-MM-dd")}" +
                 $"&returnDate={searchForm.ReturnDate.Value.ToString("yyyy-MM-dd")}";
 

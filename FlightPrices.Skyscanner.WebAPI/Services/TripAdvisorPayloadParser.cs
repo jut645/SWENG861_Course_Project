@@ -35,13 +35,13 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
             return true;
         }
 
-        public IList<Flight> GetQuoteData()
+        public IList<Quote> GetQuoteData()
         {
-            var flights = new List<Flight>();
+            var flights = new List<Quote>();
 
             foreach (var itinerary in Itineraries)
             {
-                var flight = new Flight();
+                var flight = new Quote();
 
                 // Get best price
                 int cheapestPrice = GetCheapestPriceFromItinerary(itinerary);

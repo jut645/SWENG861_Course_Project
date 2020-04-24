@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlightPrices.Skyscanner.WebAPI\FlightPrices.Skyscanner.WebAPI.csproj" />
+    <ProjectReference Include="..\FlightPrices.Skyscanner.WebAPI\FlightPrices.WebAPI.csproj" />
     <ProjectReference Include="..\FlightPrices.WebApp\FlightPrices.WebApp.csproj" />
   </ItemGroup>
 

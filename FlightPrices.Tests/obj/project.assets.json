@@ -3292,7 +3292,7 @@
           "build/netcoreapp1.0/xunit.runner.visualstudio.props": {}
         }
       },
-      "FlightPrices.Skyscanner.WebAPI/1.0.0": {
+      "FlightPrices.WebAPI/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
@@ -3303,10 +3303,10 @@
           "Unirest-API": "1.0.7.6"
         },
         "compile": {
-          "bin/placeholder/FlightPrices.Skyscanner.WebAPI.dll": {}
+          "bin/placeholder/FlightPrices.WebAPI.dll": {}
         },
         "runtime": {
-          "bin/placeholder/FlightPrices.Skyscanner.WebAPI.dll": {}
+          "bin/placeholder/FlightPrices.WebAPI.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
@@ -3316,7 +3316,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
-          "FlightPrices.Skyscanner.WebAPI": "1.0.0",
+          "FlightPrices.WebAPI": "1.0.0",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "3.1.1",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.1",
           "Microsoft.AspNetCore.Identity.UI": "3.1.1",
@@ -10350,10 +10350,10 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "FlightPrices.Skyscanner.WebAPI/1.0.0": {
+    "FlightPrices.WebAPI/1.0.0": {
       "type": "project",
-      "path": "../FlightPrices.Skyscanner.WebAPI/FlightPrices.Skyscanner.WebAPI.csproj",
-      "msbuildProject": "../FlightPrices.Skyscanner.WebAPI/FlightPrices.Skyscanner.WebAPI.csproj"
+      "path": "../FlightPrices.Skyscanner.WebAPI/FlightPrices.WebAPI.csproj",
+      "msbuildProject": "../FlightPrices.Skyscanner.WebAPI/FlightPrices.WebAPI.csproj"
     },
     "FlightPrices.WebApp/1.0.0": {
       "type": "project",
@@ -10363,7 +10363,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "FlightPrices.Skyscanner.WebAPI >= 1.0.0",
+      "FlightPrices.WebAPI >= 1.0.0",
       "FlightPrices.WebApp >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 16.2.0",
       "Moq >= 4.13.1",
@@ -10406,8 +10406,8 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.Skyscanner.WebAPI.csproj": {
-              "projectPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.Skyscanner.WebAPI.csproj"
+            "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.WebAPI.csproj": {
+              "projectPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.WebAPI.csproj"
             },
             "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.WebApp\\FlightPrices.WebApp.csproj": {
               "projectPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.WebApp\\FlightPrices.WebApp.csproj"
@@ -10456,9 +10456,6 @@
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {
-          "Microsoft.AspNetCore.App": {
-            "privateAssets": "none"
-          },
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }

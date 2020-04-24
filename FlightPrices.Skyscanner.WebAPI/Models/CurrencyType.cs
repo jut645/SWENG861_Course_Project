@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FlightPrices.Skyscanner.WebAPI.Models
+﻿namespace FlightPrices.Skyscanner.WebAPI.Models
 {
+    /// <summary>
+    /// The <c>CurrencyType</c> enum represents the types of currencies.
+    /// </summary>
     public enum CurrencyType
     {
         UnitedStatesOfAmericaDollar = 1

@@ -4,12 +4,12 @@
     "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.WebApp\\FlightPrices.WebApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.Skyscanner.WebAPI.csproj": {
+    "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.Skyscanner.WebAPI.csproj",
-        "projectName": "FlightPrices.Skyscanner.WebAPI",
-        "projectPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.Skyscanner.WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.WebAPI.csproj",
+        "projectName": "FlightPrices.WebAPI",
+        "projectPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.WebAPI.csproj",
         "packagesPath": "C:\\Users\\jaket\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
@@ -122,8 +122,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.Skyscanner.WebAPI.csproj": {
-                "projectPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.Skyscanner.WebAPI.csproj"
+              "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.WebAPI.csproj": {
+                "projectPath": "C:\\Users\\jaket\\Documents\\SWENG861\\CourseProject\\FlightPrices\\FlightPrices.Skyscanner.WebAPI\\FlightPrices.WebAPI.csproj"
               }
             }
           }

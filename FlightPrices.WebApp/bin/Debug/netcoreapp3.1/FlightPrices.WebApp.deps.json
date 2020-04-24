@@ -24,7 +24,7 @@
     ".NETCoreApp,Version=v3.1": {
       "FlightPrices.WebApp/1.0.0": {
         "dependencies": {
-          "FlightPrices.Skyscanner.WebAPI": "1.0.0",
+          "FlightPrices.WebAPI": "1.0.0",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "3.1.1",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.1",
           "Microsoft.AspNetCore.Identity.UI": "3.1.1",
@@ -2329,7 +2329,7 @@
           "lib/unirest-net.dll": {}
         }
       },
-      "FlightPrices.Skyscanner.WebAPI/1.0.0": {
+      "FlightPrices.WebAPI/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "3.1.1",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.1",
@@ -2338,10 +2338,10 @@
           "Unirest-API": "1.0.7.6"
         },
         "runtime": {
-          "FlightPrices.Skyscanner.WebAPI.dll": {}
+          "FlightPrices.WebAPI.dll": {}
         },
         "compile": {
-          "FlightPrices.Skyscanner.WebAPI.dll": {}
+          "FlightPrices.WebAPI.dll": {}
         }
       },
       "Microsoft.AspNetCore.Antiforgery/3.1.0.0": {
@@ -5118,7 +5118,7 @@
       "path": "unirest-api/1.0.7.6",
       "hashPath": "unirest-api.1.0.7.6.nupkg.sha512"
     },
-    "FlightPrices.Skyscanner.WebAPI/1.0.0": {
+    "FlightPrices.WebAPI/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

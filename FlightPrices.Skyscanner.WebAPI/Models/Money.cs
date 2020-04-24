@@ -1,76 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FlightPrices.Skyscanner.WebAPI.Models
+﻿namespace FlightPrices.Skyscanner.WebAPI.Models
 {
+    /// <summary>
+    /// The <c>Money</c> class represents a money value in some currency.
+    /// </summary>
     public class Money
     {
-        public decimal Value { get; private set; }
+        public decimal Value { get; private set; }                // The scalar value of the money
 
-        public CurrencyType CurrencyType { get; private set; }
+        public CurrencyType CurrencyType { get; private set; }    // The money's currency type        
 
-        public Money(decimal value, CurrencyType type)
+        /// <summary>
+        /// <c>Money</c> class constructor.
+        /// </summary>
+        /// <param name="value">The scalar value of the money.</param>
+        /// <param name="type">The currency type of the money.</param>
+        public Money(decimal value, CurrencyType type)            
         {
             Value = value;
             CurrencyType = type;
         }
 
+        /// <summary>
+        /// Default <c>Money</c> class constructor.
+        /// </summary>
         private Money() { }
-
-        public static Money operator+ (Money leftHandSide, Money rightHandSide)
-        {
-            if (leftHandSide.CurrencyType != rightHandSide.CurrencyType)
-            {
-                throw new InvalidOperationException("The two Money objects do " +
-                    "not have the same currency type.");
-            }
-
-            var result = new Money();
-
-            result.Value = leftHandSide.Value + rightHandSide.Value;
-            result.CurrencyType = leftHandSide.CurrencyType;
-
-            return result;
-        }
-
-        public static bool operator>= (Money leftHandSide, Money rightHandSide)
-        {
-            if (leftHandSide.CurrencyType != rightHandSide.CurrencyType)
-            {
-                throw new InvalidOperationException("The two Money objects do " +
-                    "not have the same currency type.");
-            }
-
-            return leftHandSide.Value >= rightHandSide.Value;
-        }
-
-        public static bool operator <= (Money leftHandSide, Money rightHandSide)
-        {
-            return !(leftHandSide > rightHandSide);
-        }
-
-        public static bool operator< (Money leftHandSide, Money rightHandSide)
-        {
-            return !(leftHandSide >= rightHandSide);
-        }
-
-        public static bool operator>(Money leftHandSide, Money rightHandSide)
-        {
-            return !(leftHandSide < rightHandSide);
-        }
-
-        public static bool operator==(Money leftHandSide, Money rightHandSide)
-        {
-            return !(leftHandSide > rightHandSide) && !(leftHandSide < rightHandSide);
-        }
-
-        public static bool operator!=(Money leftHandSide, Money rightHandSide)
-        {
-            return !(leftHandSide == rightHandSide);
-        }
-
-
     }
 }

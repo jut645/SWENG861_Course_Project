@@ -1,13 +1,14 @@
 ﻿using FlightPrices.Skyscanner.WebAPI.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FlightPrices.WebApp.Payloads
 {
+    /// <summary>
+    /// The <c>BrowseQuotesPayload</c> class is a container for the payload coming from the 
+    /// BrowseQuotesController in the WebAPI project.
+    /// </summary>
     public class BrowseQuotesPayload
     {
-        public IList<Flight> Quotes { get; set; }
+        public IList<Quote> Quotes { get; set; }    // List of quotes matching a search
     }
 }

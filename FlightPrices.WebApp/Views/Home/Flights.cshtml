@@ -10,7 +10,7 @@
         style="width:100%">
     <thead>
         <tr>
-            <th>Price</th>
+            <th>Price($)</th>
             <th>Departure Airline</th>
             <th>Departure Takeoff Time</th>
 
@@ -27,7 +27,7 @@
         @foreach (var quote in Model.Quotes)
         {
         <tr>
-            <td>@quote.Cost.Value</td>
+            <td>@Decimal.ToInt32(quote.Cost.Value)</td>
             <td>@quote.DepartureAirline</td>
             <td>@quote.DepartureTakeoffTime</td>
 

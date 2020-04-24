@@ -8,7 +8,7 @@ namespace FlightPrices.WebApp.ViewModels.Home
 {
     public class HomePageQuotesViewModel
     {
-        public IList<Flight> Quotes { get; set; }
+        public IList<Quote> Quotes { get; set; }
 
         public bool IsRoundTrip { get; set; }
     }

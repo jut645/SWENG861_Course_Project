@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FlightPrices.Skyscanner.WebAPI.Models
 {
+    /// <summary>
+    /// The <c>Quote</c> class is a Data Transfer Object for communicating Quote information.
+    /// </summary>
     public class Quote
     {
-        public int QuoteId { get; set; }
+        public Money Cost { get; set; }                        // Cheapest cost of flight
 
-        public double MinPrice { get; set; }
+        public string DepartureAirline { get; set; }           // Airline of first departure
 
-        public bool Direct { get; set; }
+        public DateTime DepartureTakeoffTime { get; set; }     // Time of first departure
 
-        public DateTime QuoteDateTime { get; set; }
+        public string ReturnAirline { get; set; }              // Airline of return trip (optional)
 
-        public Leg OutboundLeg { get; set; }
+        public DateTime? ReturnTakeoffTime { get; set; }       // Time of return trip (optional)
 
-        public Leg InboundLeg { get; set; }
+        public bool IsDirect { get; set; }                     // True if there are no stops during the flight.
     }
 }

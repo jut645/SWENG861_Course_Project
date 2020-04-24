@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightPrices.Skyscanner.WebAPI", "FlightPrices.Skyscanner.WebAPI\FlightPrices.Skyscanner.WebAPI.csproj", "{79E09276-27BC-44BA-A424-1769B8992448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightPrices.WebAPI", "FlightPrices.Skyscanner.WebAPI\FlightPrices.WebAPI.csproj", "{79E09276-27BC-44BA-A424-1769B8992448}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F5B7F700-120A-4878-8CC3-D0CE4119C45B}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightPrices.WebApp", "FlightPrices.WebApp\FlightPrices.WebApp.csproj", "{1CB2EF68-43CE-4789-B3B9-A0388D6EE881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightPrices.Tests", "FlightPrices.Tests\FlightPrices.Tests.csproj", "{54C3B55C-F21F-44C2-821F-B684BC9EE8DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightPrices.Tests", "FlightPrices.Tests\FlightPrices.Tests.csproj", "{54C3B55C-F21F-44C2-821F-B684BC9EE8DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

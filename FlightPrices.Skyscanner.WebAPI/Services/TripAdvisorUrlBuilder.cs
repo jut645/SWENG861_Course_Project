@@ -39,5 +39,10 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
                 $"dd1={DepartureDate.ToString("yyyy-MM-dd")}";
         }
 
+        public static string BuildPollUrl(string sessionId)
+        {
+            return $"flights/poll?sid={sessionId}&currency=USD&n=15&ns=NON_STOP%252CONE_STOP&so=PRICE&o=0";
+        }
+
     }
 }

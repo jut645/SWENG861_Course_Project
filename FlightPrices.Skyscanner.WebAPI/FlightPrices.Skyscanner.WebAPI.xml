@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>FlightPrices.Skyscanner.WebAPI</name>
+        <name>FlightPrices.WebAPI</name>
     </assembly>
     <members>
         <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.ApiKey">
@@ -22,93 +22,269 @@
             </summary>
             <param name="value">The value of the Skyscanner API key.</param>
         </member>
-        <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerBaseUrl">
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.BaseUrl">
             <summary>
             This class acts as a container for the Skyscanner API URL to be used 
             by .NET core's dependency injection framework.
             </summary>
         </member>
-        <member name="P:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerBaseUrl.Value">
+        <member name="P:FlightPrices.Skyscanner.WebAPI.Clients.BaseUrl.Value">
             <summary>
             Property for retrieving the actual value of the Skyscanner API URL
             from the wrapper object.
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerBaseUrl.#ctor(System.String)">
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.BaseUrl.#ctor(System.String)">
             <summary>
             Constructor for the SkyscannerBaseUrl class.
             </summary>
             <param name="value">The value of the Skyscanner API URL.</param>
         </member>
-        <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient">
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.Contracts.IClient">
             <summary>
-                Class <c>SkyscannerClient</c> faciliates communication with the Skyscanner API.
+                Interface <c>IClient</c> defines the interface that the Controllers will depend upon.
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.Contracts.IClient.GetRoundTripFlights(System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+                The method signature to implement for getting a list of quotes for a round trip.
+                <param name="origin">The name of the origin </param>
+                <param name="destination">The name of the destination airport.</param>
+                <param name="departureDate">The date that the flight will depart from the origin airport.</param>
+                <param name="returnDate">The date that the flight will depart to return to the origin.</param>
+                 <returns>
+                    The <c>Flight</c> instances for this search.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.Contracts.IClient.GetOneWayFlights(System.String,System.String,System.DateTime)">
+            <summary>
+                The method signature to implement for getting a list of quotes for a one way trip.
+                <param name="origin">The name of the origin </param>
+                <param name="destination">The name of the destination airport.</param>
+                <param name="departureDate">The date that the flight will depart from the origin airport.</param>
+                 <returns>
+                    The <c>Flight</c> instances for this search.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.Contracts.IClient.GetAirports">
+            <summary>
+                The method signature to implement for getting the list of Airports instances from the database.
+                 <returns>
+                    The <c>Airports</c> instances.
+                </returns>
+            </summary>
+        </member>
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient">
+            <summary>
+                Class <c>TravelAdvisorClient</c> faciliates communication with the TripAdvisor API.
                 <remarks>
-                    Implements the <c>ISkyscanner</c> interface. 
+                    Implements the <c>IClient</c> interface. 
                 </remarks> 
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.#ctor(FlightPrices.Skyscanner.WebAPI.Clients.ApiKey,FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerBaseUrl,Microsoft.Extensions.Logging.ILogger{FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient},System.Net.Http.IHttpClientFactory,FlightPrices.Skyscanner.WebAPI.Models.FlightPricesContext)">
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.#ctor(FlightPrices.Skyscanner.WebAPI.Models.FlightPricesContext,System.Net.Http.IHttpClientFactory)">
             <summary>
-                The <c>SkyscannerClient</c> class constructor.
-                <param name="key">The container for the Skyscanner API authentication key.</param>
-                <param name="url">The container for the Skyscanner Base URL, common to all requests.</param>
-                <param name="logger">An ILogger implementation instance.</param>
-                <param name="httpClientFactory">An IHttpClientFactory implementation instance.</param>
+                The <c>TravelAdvisorClient</c> class constructor.
+                <param name="factory">An IHttpClientFactory implementation instance.</param>
                 <param name="context">The DbContext for the FlightPrices database.</param>
-                <remarks>
-                    Logs the values for the Skyscanner API Authentication Key and the Skyscanner Base URL.
-                    The parameters of this method are injected via the .NET Dependency Injection mechanism.
-                </remarks>
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.GetAirports">
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.GetAirports">
             <summary>
                 Gets the collection of airports that can be used in a query.
+                <returns>
+                    The<c>Airports</c> instances from the database.
+                </returns>
                 <remarks>
                     This method eagerly loads the airports from the database.
                 </remarks>
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.GetOneWayFlights(System.String,System.String,System.DateTime)">
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.GetOneWayFlights(System.String,System.String,System.DateTime)">
             <summary>
                 Gets the real-time one-way flight prices based on search criteria.
                 <param name="origin">The name of the origin </param>
-                <param name="destintation">The name of the destination airport.</param>
+                <param name="destination">The name of the destination airport.</param>
                 <param name="departureDate">The date that the flight will depart from the origin airport.</param>
-                <see cref="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.GetOneWayFlights(System.String,System.String,System.DateTime)"/>
-                <see cref="M:FlightPrices.Skyscanner.WebAPI.Services.SkyscannerUrlBuilder.BuildOneWayFlightUrl(FlightPrices.Skyscanner.WebAPI.Models.Airports,FlightPrices.Skyscanner.WebAPI.Models.Airports,System.DateTime)"/>>
-                <see cref="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.MakeHTTPRequest``1(System.String)"/>
-                <remarks>This method makes an HTTP Request and is thus asynchronous.</remarks>
+                 <returns>
+                    The <c>Flight</c> instances for this search.
+                </returns>
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.MakeHTTPRequest``1(System.String)">
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.GetRoundTripFlights(System.String,System.String,System.DateTime,System.DateTime)">
             <summary>
-                Make an HTTP GET request to the Skyscanner API.
-                <param name="url">The url to append the Skyscanner base url.</param>
-                <see cref="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.GetHttpClient"></see>
+                Gets the real-time one-way flight prices based on search criteria.
+                <param name="origin">The name of the origin </param>
+                <param name="destination">The name of the destination airport.</param>
+                <param name="departureDate">The date that the flight will depart from the origin airport.</param>
+                <param name="returnDate">The date that the flight will depart to return to the origin.</param>
+                 <returns>
+                    The <c>Flight</c> instances for this search.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.PollCurrentSession">
+            <summary>
+                Polls the current session for quotes.
+                 <returns>
+                    The <c>Flight</c> instances for this search.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.CreateSession(System.String,System.String,System.DateTime)">
+            <summary>
+                Creates a session for the search parameters.
+                <param name="origin">The name of the origin </param>
+                <param name="destination">The name of the destination airport.</param>
+                <param name="departureDate">The date that the flight will depart from the origin airport.</param>
+                 <returns>
+                    An awaitable Task instance.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.CreateSession(System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+                Creates a session for the search parameters.
+                <param name="origin">The name of the origin </param>
+                <param name="destination">The name of the destination airport.</param>
+                <param name="departureDate">The date that the flight will depart from the origin airport.</param>
+                <param name="returnDate">The date that the flight will depart to return to the origin.</param>
+                 <returns>
+                    An awaitable Task instance.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.MakeHTTPRequestRaw(System.String)">
+            <summary>
+                Makes an Http Request and returns the response content as raw json.
+                <param name="url">The url for the Http Request.</param>
+                 <returns>
+                    The string corresponding the JSON response content.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.MakeHTTPRequest``1(System.String)">
+            <summary>
+                Makes an Http Request and returns the response content as an instance of an object.
+                <param name="url">The url for the Http Request.</param>
+                 <returns>
+                    The object corresponding to the response content payload.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.GetAirportFromAirportName(System.String)">
+            <summary>
+                Gets the <c>Airports</c> instance corresponding to the airport name.
+                <param name="airportName">the name of the airport.</param>
+                 <returns>
+                    The <c>Airports</c> instance corresponding to the airport name.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.TravelAdvisorClient.GetHttpClient">
+            <summary>
+                Helper method to get a configured HttpClient from the IHttpFactory instance.
+                 <returns>
+                    The configured HttpClient.
+                </returns>
+            </summary>
+        </member>
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Controllers.AirportsController">
+            <summary>
+                Class <c>AirportsController</c> serves HTTP GET requests for the Airports instances.
                 <remarks>
-                    This method makes an HTTP Request and is thus asynchronous. The HTTP client is served by the 
-                    IHttpClientFactory instance. The Skyscanner responses are mapped to corresponding objects; 
-                    these objects make it possible to make this algorithm generic.
+                    This controller services requests for the route "/airports/".
                 </remarks>
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.GetAirportFromAirportName(System.String)">
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Controllers.AirportsController.#ctor(FlightPrices.Skyscanner.WebAPI.Clients.Contracts.IClient)">
             <summary>
-                Get the Airports objects from the database corresponding to the airportName
-                <param name="airportName">The name of the airport to retrieve.</param>
-                <exception cref="T:System.InvalidOperationException">
-                    Thrown if the airport name does not match any Airports entry or if matches more than one.
-                </exception>
+                The <c>AirportsController</c> class constructor.
+                <param name="client">An IClient interface implementation.</param>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Controllers.AirportsController.Get">
+            <summary>
+                Serves HTTP GET Requests for the list of Airports.
+                <returns>
+                    The JSON payload corresponding to the list of airports.
+                </returns>
                 <remarks>
-                    There should be exactly one airports entry for each name. 
+                    Services HTTP GET requests to the Url "/airports/"
                 </remarks>
             </summary>
         </member>
-        <member name="M:FlightPrices.Skyscanner.WebAPI.Clients.SkyscannerClient.GetHttpClient">
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Controllers.BrowseQuotesController">
             <summary>
-                Gets an HTTP Client from the IHttpClientFactory instance and configures it.
+                Class <c>BrowseQuotesController</c> serves HTTP GET requests for flight quotes.
+                <remarks>
+                    This controller services requests for the route "/browsequotes/".
+                </remarks>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Controllers.BrowseQuotesController.#ctor(FlightPrices.Skyscanner.WebAPI.Clients.Contracts.IClient)">
+            <summary>
+                The <c>BrowseQuotesController</c> class constructor.
+                <param name="client">An IClient interface implementation.</param>
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:FlightPrices.Skyscanner.WebAPI.Controllers.BrowseQuotesController.GetOneWay(System.String,System.String,System.DateTime)" -->
+        <!-- Badly formed XML comment ignored for member "M:FlightPrices.Skyscanner.WebAPI.Controllers.BrowseQuotesController.GetRoundTrip(System.String,System.String,System.DateTime,System.DateTime)" -->
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Models.Airports">
+            <summary>
+                Class <c>Airports</c> represents the Airports table in the FlightPrices database.
+                <remarks>
+                    Nuilt automatically by the Scaffold-DbContext dotnet command with EntityFramework.
+                </remarks> 
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Models.Airports.op_Equality(FlightPrices.Skyscanner.WebAPI.Models.Airports,FlightPrices.Skyscanner.WebAPI.Models.Airports)">
+            <summary>
+                Overloads the == operator to compare two Airports instances for property-wise equality.
+                <param name="airportLeft">The airport instance on the left of the == operator.</param>
+                <param name="airportRight">The airport instance on the right of the == operator.</param>
+                 <returns>
+                    True if the flights are property-wise equal; false otherwise.
+                </returns>
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Models.Airports.op_Inequality(FlightPrices.Skyscanner.WebAPI.Models.Airports,FlightPrices.Skyscanner.WebAPI.Models.Airports)">
+            <summary>
+                Overloads the != operator to compare two Airports instances for property-wise equality.
+                <param name="airportLeft">The airport instance on the left of the != operator.</param>
+                <param name="airportRight">The airport instance on the right of the != operator.</param>
+                 <returns>
+                    True if the flights are not property-wise equal; false otherwise.
+                </returns>
+            </summary>
+        </member>
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Models.CurrencyType">
+            <summary>
+            The <c>CurrencyType</c> enum represents the types of currencies.
+            </summary>
+        </member>
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Models.Money">
+            <summary>
+            The <c>Money</c> class represents a money value in some currency.
+            </summary>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Models.Money.#ctor(System.Decimal,FlightPrices.Skyscanner.WebAPI.Models.CurrencyType)">
+            <summary>
+            <c>Money</c> class constructor.
+            </summary>
+            <param name="value">The scalar value of the money.</param>
+            <param name="type">The currency type of the money.</param>
+        </member>
+        <member name="M:FlightPrices.Skyscanner.WebAPI.Models.Money.#ctor">
+            <summary>
+            Default <c>Money</c> class constructor.
+            </summary>
+        </member>
+        <member name="T:FlightPrices.Skyscanner.WebAPI.Models.Quote">
+            <summary>
+            The <c>Quote</c> class is a Data Transfer Object for communicating Quote information.
             </summary>
         </member>
     </members>
