@@ -11,7 +11,6 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap4")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-FlightPrices.WebApp-A6787A28-B462-45E5-BB17-339A0731AA79")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("FlightPrices.WebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
