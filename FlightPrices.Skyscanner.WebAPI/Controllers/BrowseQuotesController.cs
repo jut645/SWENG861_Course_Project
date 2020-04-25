@@ -3,6 +3,7 @@ using FlightPrices.Skyscanner.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FlightPrices.Skyscanner.WebAPI.Controllers
@@ -15,7 +16,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class BrowseQuotesController
+    public class BrowseQuotesController : Controller
     {
         private readonly IClient _client;
 
@@ -44,13 +45,33 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         /// </summary>
         [HttpGet]
         [Route("oneWay")]
-        public async Task<string> GetOneWay(string origin, string destination, DateTime departureDate)
+        public async Task<IActionResult> GetOneWay(string origin, string destination, DateTime departureDate)
         {
+            if (origin == destination)
+            {
+                return BadRequest();
+            }
+
+            if (departureDate.Date < DateTime.Now.Date)
+            {
+                return BadRequest();
+            }
+
+            var airports = _client.GetAirports();
+            var airportNames = airports
+                .Select(a => a.AirportName)
+                .ToList();
+
+            if (!airportNames.Contains(origin) || !airportNames.Contains(destination))
+            {
+                return BadRequest();
+            }
+
             // Get quotes from client
             var quotes = await _client.GetOneWayFlights(origin, destination, departureDate);
             var payload = new { quotes = quotes };
 
-            return JsonConvert.SerializeObject(payload);   // Serialize payload to JSON
+            return Ok(JsonConvert.SerializeObject(payload));   // Serialize payload to JSON
         }
 
         /// <summary>

@@ -1,60 +1,75 @@
-﻿@model FlightPrices.WebApp.ViewModels.Home.HomePageQuotesViewModel
+﻿<!-- The View for the Flight Price search results table. -->
+
+
+<!-- The ViewModel for this view is the HomePageQuotesViewModel -->
+@model FlightPrices.WebApp.ViewModels.Home.HomePageQuotesViewModel
 
 @{
     ViewData["Title"] = "Flights";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!-- This table holds the quote data -->
 <table id="flights"
-        class="table table-striped table-bordered"
-        style="width:100%">
-    <thead>
+       class="table table-striped table-bordered"
+       style="width:100%">
+    <thead>                                           <!-- Headers for the table -->                         
         <tr>
-            <th>Price($)</th>
-            <th>Departure Airline</th>
-            <th>Departure Takeoff Time</th>
+            <th>Price($)</th>                         <!-- Price Column Header; assumes value in USA dollars -->
+            <th>Departure Airline</th>                <!-- Departure Airline Column -->
+            <th>Departure Takeoff Time</th>           <!-- Departure takeoff time column -->
 
-            @if (Model.IsRoundTrip)
+                                                      <!-- Only display these columns if a round trip search -->
+            @if (Model.IsRoundTrip)                   
             {
-                <th>Return Airline</th>
-                <th>Return Takeoff Time</th>
+                <th>Return Airline</th>               <!-- Return Airline Column -->
+                <th>Return Takeoff Time</th>          <!-- Return takeoff time column -->
             }
 
-            <th>Direct</th>
+            <th>Direct</th>                           <!-- Indicates whether the flight is direct -->         
         </tr>
     </thead>
+
+    <!-- This is the actual body of the table -->  
     <tbody>
+                                                               <!-- For each quote, create a row -->
         @foreach (var quote in Model.Quotes)
         {
-        <tr>
-            <td>@Decimal.ToInt32(quote.Cost.Value)</td>
-            <td>@quote.DepartureAirline</td>
-            <td>@quote.DepartureTakeoffTime</td>
+            <tr>
+                <td>@Decimal.ToInt32(quote.Cost.Value)</td>    <!-- No cents - display as int -->
+                <td>@quote.DepartureAirline</td>               <!-- Display departure airline name -->
+                <td>@quote.DepartureTakeoffTime</td>           <!-- Display the departure takeoff time -->
 
-            @if (Model.IsRoundTrip)
-            {
-                <td>@quote.ReturnAirline</td>
-                <td>@quote.ReturnTakeoffTime</td>
-            }
+                                                               <!-- Only display if a round trip search -->
+                @if (Model.IsRoundTrip)
+                {
+                    <td>@quote.ReturnAirline</td>              <!-- Display Return Airline name -->
 
-            <td>@quote.IsDirect</td>
-        </tr>
+                    <td>@quote.ReturnTakeoffTime</td>          <!-- Display the return takeoff time -->
+
+                }
+
+                <td>@quote.IsDirect</td>                       <!-- Display whether the flight is direct -->
+            </tr>
 
         }
     </tbody>
-
 </table>
 
 @section scripts
 {
     <script>
-        $(document).ready(function () {
+
+        // This JQuery function builds and configures the datatable
+        $(document).ready(function() 
+        {
+            // 'flights' is the id of the datatable div element 
             $('#flights').DataTable(
-                {
-                    "bInfo": false,
-                    "pageLength": 5,
-                    "bLengthChange": false,
-                });
+            {
+                "bInfo": false,            // Disable displaying data about the current datatable 
+                "pageLength": 5,           // Set the number of rows per page to 5
+                "bLengthChange": false     // Turn of the menu item for setting the number of rows per page
+            });
         });
     </script>
 }

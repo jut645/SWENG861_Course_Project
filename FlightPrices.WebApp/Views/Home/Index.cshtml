@@ -1,79 +1,101 @@
-﻿@model FlightPrices.WebApp.ViewModels.Home.HomeSearchViewModel
+﻿<!-- The View for the intial search form page -->
 
+
+<!-- The ViewModel for this view is the HomeSearchViewModel -->
+@model FlightPrices.WebApp.ViewModels.Home.HomeSearchViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@using (Html.BeginForm(actionName: "Search",
-                     controllerName: "Home",
-                     method: FormMethod.Get,
-                     new
-                     {
-                         id = "flightPriceForm"
-                     }))
+<!-- The View for the intial search form page -->
+@using (Html.BeginForm(actionName: "Search", controllerName: "Home", method: FormMethod.Get))
 {
-    <div class="form-group">
+    <div class="form-group">               <!-- This field will accept input for the origin airport name -->
         <label for="origin">
             Where From?
         </label>
-        <input type="text"
+
+        <!--Binds to the OriginAirport view model property -->      
+        <input type="text"                         
                class="form-control"
                id="origin"
                aria-describedby="origin-help"
                placeholder="Select Origin"
                asp-for="OriginAirport" />
-        @Html.ValidationMessageFor(model => model.OriginAirport, "", new { @class = "text-danger" })
 
+        <!-- Display an error message for the OriginAirport field if validation fails --> 
+        @Html.ValidationMessageFor(model => model.OriginAirport, "", new { @class = "text-danger" })
     </div>
-    <div class="form-group">
+
+    <div class="form-group">               <!-- This field will accept input for the destination airport name -->
         <label for="destination">
             Where To?
         </label>
+
+        <!--Binds to the DestinationAirport view model property -->  
         <input type="text"
                class="form-control"
                id="destination"
                aria-describedby="destination-help"
                placeholder="Select Destination"
                asp-for="DestinationAirport" />
-        @Html.ValidationMessageFor(model => model.DestinationAirport, "", new { @class = "text-danger" })
 
+        <!-- Display an error message for the DestinationAirport field if validation fails --> 
+        @Html.ValidationMessageFor(model => model.DestinationAirport, "", new { @class = "text-danger" })
     </div>
-    <div class="form-group">
+
+    <div class="form-group">               <!-- This field will accept input for the take off date -->
         <div>
             <label for="departure-date">
                 When Do You Want To Leave?
             </label>
         </div>
+
+        <!--Binds to the TakeOffDate ViewModel property -->  
+        <!--The minimum value is the current date, to prevent invalid input-->
         <input id="departure-date"
                type="date"
                asp-for="TakeOffDate"
                min="@DateTime.Now.ToString("yyyy-MM-dd")" />
         <div></div>
+
+        <!-- Display an error message for the TakeOffDate field if validation fails --> 
         @Html.ValidationMessageFor(model => model.TakeOffDate, "", new { @class = "text-danger" })
     </div>
-    <div class="form-group">
+
+    <div class="form-group">                <!-- This field will accept input for the return date -->
         <div>
             <label for="return-date">
                 When Do You Want To Return?
             </label>
         </div>
+
+        <!--Binds to the ReturnDate ViewModel property. Disabled by default. -->  
+        <!--The minimum value is the current date, to prevent invalid input-->
         <input id="return-date"
                type="date"
                asp-for="ReturnDate"
                min="@DateTime.Now.ToString("yyyy-MM-dd")"
                disabled />
     </div>
-    <div class="form-check">
+
+    <div class="form-check">             <!-- This field for whether the flights should be round trip -->
+
+        <!--Binds to the IsRoundTrip property in the ViewModel -->  
         <input type="checkbox"
                class="form-check-input"
                id="round-trip"
                asp-for="IsRoundTrip" />
+
+        <!-- Display an error message for the IsRoundTrip field if validation fails --> 
         @Html.ValidationMessageFor(model => model.IsRoundTrip, "", new { @class = "text-danger" })
+
         <label class="form-check-label"
                for="round-trip">
             Round Trip
         </label>
     </div>
+
     <button type="submit"
             class="btn btn-primary">
         Submit
@@ -83,47 +105,70 @@
 @section Scripts
 {
     <script>
-        $('#round-trip').click(function () {
-
-            if ($('#round-trip').prop("checked")) {
+        
+        // This JQuery function disables the return-date field if the round-trip field is checked and 
+        // vice versa
+        $('#round-trip').click(function() 
+        {
+            if ($('#round-trip').prop("checked")) 
+            {
                 $("#return-date").prop('disabled', false);
             }
-            else {
+            else 
+            {
                 $("#return-date").prop('disabled', true);
             }
         });
+
     </script>
 
     <script>
-        $(document).ready(function ()
+
+        // This JQuery script implements autocomplete and suggestions for airport names for the origin and
+        // destination airport name fields
+        $(document).ready(function()
         {
+            // Serialize the server-side Airports instances into JSON objects
             let airports = @Html.Raw(Json.Serialize(@Model.Airports));
+
+            // Get the list of valid airport names
             let airportNames = airports.map(a => a.airportName);
 
+            // Activate autocompletion using the airportNames list
             $("#origin, #destination").autocomplete(
             {
                 source: airportNames
             });
+        })
 
-            $("#departure-date").change(function()
+    </script>
+
+    <script>
+
+        // This JQuery function changes the minimum date of the return-date input to guarantee
+        // that the user cannot select a return-date that is earlier than the departure data
+        $("#departure-date").change(function()
+        {
+            // Get the new value of the departureDate
+            let departureValue = $("#departure-date").val();
+            let departureDate = Date.parse(departureValue);
+
+            if (!document.getElementById("return-date").disabled)
             {
-                let departureValue = $("#departure-date").val();
-                let departureDate = Date.parse(departureValue);
+                // Get the current value of the returnDate
+                let returnValue = $("#return-date").val();
+                let returnDate = Date.parse(returnValue);
 
-                if (!document.getElementById("return-date").disabled)
+                // If the new departure date is later than the return date, reset the return date
+                // to the new departure date value
+                if (returnDate < departureDate)
                 {
-                    let returnValue = $("#return-date").val();
-                    let returnDate = Date.parse(returnValue);
-
-                    if (returnDate < departureDate)
-                    {
-                        document.getElementById("return-date").value = departureValue;
-                    }
+                    document.getElementById("return-date").value = departureValue;
                 }
+            }
 
-                document.getElementById("return-date").setAttribute("min", departureValue);
-
-            })
-        });
+            // Set the new minimum value of the return-date to be the new departure data.
+            document.getElementById("return-date").setAttribute("min", departureValue);
+        })
     </script>
 }

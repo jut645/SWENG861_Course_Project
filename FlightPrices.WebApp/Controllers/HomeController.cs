@@ -10,6 +10,7 @@ using System.Net.Http;
 using FlightPrices.Skyscanner.WebAPI.Models;
 using Newtonsoft.Json;
 using FlightPrices.WebApp.Payloads;
+using System.Net.Sockets;
 
 namespace FlightPrices.WebApp.Controllers
 {
@@ -68,7 +69,7 @@ namespace FlightPrices.WebApp.Controllers
                 return View(viewModel);
 
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
                 return View("HttpErrorPage");
             }
