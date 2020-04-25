@@ -168,7 +168,10 @@ namespace FlightPrices.WebApp.Controllers
             var viewModel = new HomePageQuotesViewModel
             {
                 Quotes = quotesResponse.Quotes,
-                IsRoundTrip = false
+                IsRoundTrip = false,
+                DepartureDate = searchForm.TakeOffDate.Value,
+                DestinationAirport = searchForm.DestinationAirport,
+                OriginAirport = searchForm.OriginAirport
             };
 
             return View("Flights", viewModel);
@@ -201,7 +204,11 @@ namespace FlightPrices.WebApp.Controllers
             var viewModel = new HomePageQuotesViewModel
             {
                 Quotes = quotesResponse.Quotes,
-                IsRoundTrip = true
+                IsRoundTrip = true,
+                DepartureDate = searchForm.TakeOffDate.Value,
+                ReturnDate = searchForm.ReturnDate.Value,
+                DestinationAirport = searchForm.DestinationAirport,
+                OriginAirport = searchForm.OriginAirport
             };
 
             return View("Flights", viewModel);
