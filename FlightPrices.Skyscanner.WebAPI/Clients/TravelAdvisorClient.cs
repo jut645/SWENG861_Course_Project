@@ -65,7 +65,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
 
             // Wait 3 seconds for poll to accumulate results on API side.
             // The TripAdvisor recommends waiting roughly three seconds for them to compile results.
-            Thread.Sleep(3000);    
+            Thread.Sleep(6000);    
 
             return await PollCurrentSession();  // Poll the results
         }
@@ -88,9 +88,9 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
             // Create session for this search
             await CreateSession(origin, destination, departureDate, returnDate);
 
-            // Wait 3 seconds for poll to accumulate results on API side.
+            // Wait 6 seconds for poll to accumulate results on API side.
             // The TripAdvisor recommends waiting roughly three seconds for them to compile results.
-            Thread.Sleep(3000);
+            Thread.Sleep(6000);
 
             return await PollCurrentSession();  // Poll the current results
         }

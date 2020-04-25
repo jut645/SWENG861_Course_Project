@@ -8,7 +8,11 @@
 }
 
 <!-- The View for the intial search form page -->
-@using (Html.BeginForm(actionName: "Search", controllerName: "Home", method: FormMethod.Get))
+@using (Html.BeginForm(
+    actionName: "Search",
+    controllerName: "Home",
+    method: FormMethod.Get,
+    new {id = "search-form" }))
 {
     <div class="form-group">               <!-- This field will accept input for the origin airport name -->
         <label for="origin">
@@ -97,10 +101,15 @@
     </div>
 
     <button type="submit"
-            class="btn btn-primary">
+            class="btn btn-primary"
+            id="submitButton">
         Submit
     </button>
 }
+
+<div id="message" style="display:none;">
+    <h3>Searching flights</h3>
+</div>
 
 @section Scripts
 {
@@ -170,5 +179,37 @@
             // Set the new minimum value of the return-date to be the new departure data.
             document.getElementById("return-date").setAttribute("min", departureValue);
         })
+    </script>
+
+    <script>
+
+        //submit search, display loading message
+        $("#search-form").submit(function() 
+        {
+            function startAnimation() 
+            {
+               let i = 0;
+               intervalId = setInterval(function() 
+               {
+                  i = ++i % 5;
+                  $("#message").html("<h3>" + "Searching flights "+ Array(i+1).join(".") + "</h3>");
+
+               }, 800);
+            }
+
+            $.blockUI({
+                css: 
+                {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#FFFFFF',
+                    opacity: 1
+                },
+                message: $('#message'),
+                fadeIn: 0
+            });
+
+            startAnimation();    
+        });
     </script>
 }
