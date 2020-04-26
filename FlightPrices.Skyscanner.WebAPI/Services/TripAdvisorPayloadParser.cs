@@ -91,8 +91,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
         {
             var flight = itinerary.SelectToken("f[1]");
             var legs = (JArray)flight.SelectToken("l");
-            var firstLeg = legs.Last();
-            var dateTime = firstLeg.SelectToken("ad").ToString();
+            var firstLeg = legs.First();
+            var dateTime = firstLeg.SelectToken("dd").ToString();
 
             return DateTime.Parse(dateTime);
         }
