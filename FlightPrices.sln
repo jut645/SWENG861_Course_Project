@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F5B7F700-120A-4878-8CC3-D0CE4119C45B}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlightPrices.WebApp", "FlightPrices.WebApp\FlightPrices.WebApp.csproj", "{1CB2EF68-43CE-4789-B3B9-A0388D6EE881}"

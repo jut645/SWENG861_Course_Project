@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\jaket\Documents\SWENG861\CourseProject\FlightPrices\FlightPrices.Skyscanner.WebAPI\FlightPrices.Skyscanner.WebAPI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
