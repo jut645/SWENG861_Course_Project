@@ -13,10 +13,16 @@ namespace FlightPrices.Skyscanner.WebAPI.Models
 
         public DateTime DepartureTakeoffTime { get; set; }     // Time of first departure
 
+        public DateTime DepartureArrivalTime { get; set; }     // Time of arrival for first trip
+
+        public int DepartureStopCount { get; set; }            // Number of stops on the way to the destination
+
         public string ReturnAirline { get; set; }              // Airline of return trip (optional)
 
         public DateTime? ReturnTakeoffTime { get; set; }       // Time of return trip (optional)
 
-        public bool IsDirect { get; set; }                     // True if there are no stops during the flight.
+        public DateTime? ReturnArrivalTime { get; set; }      // Time of arrival for the return trip
+
+        public int ReturnStopCount { get; set; }               // Number of stops on the return trip
     }
 }

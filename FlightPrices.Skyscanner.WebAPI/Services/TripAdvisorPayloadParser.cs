@@ -47,34 +47,96 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
                 int cheapestPrice = GetCheapestPriceFromItinerary(itinerary);
                 flight.Cost = new Money(cheapestPrice, CurrencyType.UnitedStatesOfAmericaDollar);
 
-                // Determine if the flight is direct
-                bool isDirect = GetIsDirectFromItinerary(itinerary);
-                flight.IsDirect = isDirect;
-
                 // Get departure airline
-                string departureAirline = GetDepartureAirlineFromItinerary(itinerary, Carriers);
-                flight.DepartureAirline = departureAirline;
+                flight.DepartureAirline = GetDepartureAirlineFromItinerary(itinerary, Carriers); ;
 
                 // Get departure airline 
-                DateTime departureTakeoffTime = GetDepartureTimeFromItineary(itinerary);
-                flight.DepartureTakeoffTime = departureTakeoffTime;
+                flight.DepartureTakeoffTime = GetDepartureTimeFromItineary(itinerary);
+
+                // Get departure arrival time
+                flight.DepartureArrivalTime = GetDepartureArrivalTime(itinerary);
+
+                // Get number of stops on the departure trip
+                flight.DepartureStopCount = GetDepartureStopsCount(itinerary);
 
                 if (IsRoundTrip())
                 {
                     // Get return airline
-                    string returnAirline = GetReturnAirlineFromItinerary(itinerary, Carriers);
-                    flight.ReturnAirline = returnAirline;
+                    flight.ReturnAirline = GetReturnAirlineFromItinerary(itinerary, Carriers);
 
                     // Get return takeoff time
-                    DateTime returnTime = GetReturnTimeFromItineary(itinerary);
-                    flight.ReturnTakeoffTime = returnTime;
+                    flight.ReturnTakeoffTime = GetReturnTimeFromItineary(itinerary);
 
+                    // Get time of return trip arrival
+                    flight.ReturnArrivalTime = GetReturnArrivalTime(itinerary);
+
+                    // Get number of stops on the return trip
+                    flight.ReturnStopCount = GetReturnStopsCount(itinerary);
                 }
 
                 flights.Add(flight);
             }
 
             return flights;
+        }
+
+        private DateTime GetReturnArrivalTime(JToken itinerary)
+        {
+            var flight = itinerary.SelectToken("f[1]");
+            var legs = (JArray)flight.SelectToken("l");
+            var lastLeg = legs.Last();
+            var arrivalTime = lastLeg.SelectToken("ad").ToString();
+
+            return DateTime.Parse(arrivalTime);
+        }
+
+        private DateTime GetDepartureArrivalTime(JToken itinerary)
+        {
+            var flight = itinerary.SelectToken("f[0]");
+            var legs = (JArray)flight.SelectToken("l");
+            var lastLeg = legs.Last();
+            var arrivalTime = lastLeg.SelectToken("ad").ToString();
+
+            return DateTime.Parse(arrivalTime);
+
+        }
+
+        private TimeSpan GetDepartureTimeSpan(JToken itinerary)
+        {
+            var flight = itinerary.SelectToken("f[0]");
+            var legs = (JArray)flight.SelectToken("l");
+            var firstLeg = legs.First();
+            var lastLeg = legs.Last();
+            var departureTime = firstLeg.SelectToken("dd").ToString();
+            var arrivalTime = lastLeg.SelectToken("ad").ToString();
+
+            return DateTime.Parse(arrivalTime) - DateTime.Parse(departureTime);
+        }
+
+        private int GetTotalNumberOfStops(JToken itinerary)
+        {
+            if (IsRoundTrip())
+            {
+                return GetDepartureStopsCount(itinerary) + GetReturnStopsCount(itinerary);
+            }
+
+            return GetDepartureStopsCount(itinerary);
+        }
+
+        private int GetDepartureStopsCount(JToken itinerary)
+        {
+            var flight = itinerary.SelectToken("f[0]");
+            var legs = (JArray)flight.SelectToken("l");
+
+            return legs.Count - 1;
+        }
+
+        private int GetReturnStopsCount(JToken itinerary)
+        {
+            var flight = itinerary.SelectToken("f[1]");
+            var legs = (JArray)flight.SelectToken("l");
+
+            return legs.Count - 1;
         }
 
         private DateTime GetDepartureTimeFromItineary(JToken itinerary)

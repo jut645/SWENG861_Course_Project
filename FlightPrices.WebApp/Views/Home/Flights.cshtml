@@ -11,19 +11,19 @@
 
 <!--Display some title information-->
     <div class="form-group">
-        <h4>
+        <h3>
             Here's what we found for:
-        </h4>
+        </h3>
         <h6 style="font-weight:normal">
-            @Model.OriginAirport to @Model.DestinationAirport
+            @Model.OriginAirport &rArr; @Model.DestinationAirport
         </h6>
         <h6 style="font-weight:normal">
-            Departing on: @Model.DepartureDate.ToString(" yyyy-MM-dd")
+            <span style="font-weight:bold">Departing on:</span> @Model.DepartureDate.ToString(" dddd MMMM dd, yyyy")
         </h6>
         @if (Model.IsRoundTrip)
         {
             <h6 style="font-weight:normal">
-                Returning on: @Model.ReturnDate.ToString(" yyyy-MM-dd")
+                <span style="font-weight:bold">Returning on:</span> @Model.ReturnDate.ToString(" dddd MMMM dd, yyyy")
             </h6>
         }
     </div>
@@ -35,18 +35,21 @@
        style="width:100%">
     <thead>                                           <!-- Headers for the table -->                         
         <tr>
-            <th>Price($)</th>                         <!-- Price Column Header; assumes value in USA dollars -->
             <th>Departure Airline</th>                <!-- Departure Airline Column -->
-            <th>Departure Takeoff Time</th>           <!-- Departure takeoff time column -->
-
-                                                      <!-- Only display these columns if a round trip search -->
+            <th>Departure Time (EST)</th>             <!-- Departure takeoff time column -->
+            <th>Departure Arrival Time (EST)</th>     <!-- Departure arrival time column -->
+            <th>Departure Trip # Stops</th>           <!-- Departure arrival time column -->
+                            
+            <!-- Only display these columns if a round trip search -->
             @if (Model.IsRoundTrip)                   
             {
                 <th>Return Airline</th>               <!-- Return Airline Column -->
-                <th>Return Takeoff Time</th>          <!-- Return takeoff time column -->
+                <th>Return Time (EST)</th>            <!-- Return takeoff time column -->
+                <th>Return Arrival Time (EST) </th>   <!--Return trip arrvial time-->
+                <th># Return Stops</th>               <!--Return trip stop count-->
             }
 
-            <th>Direct</th>                           <!-- Indicates whether the flight is direct -->         
+            <th>Price ($)</th>                         <!-- Price Column Header; assumes value in USA dollars -->
         </tr>
     </thead>
 
@@ -56,13 +59,16 @@
         @foreach (var quote in Model.Quotes)
         {
             <tr>
-                <td>@Decimal.ToInt32(quote.Cost.Value)</td>    <!-- No cents - display as int -->
                 <td>@quote.DepartureAirline</td>               <!-- Display departure airline name -->
 
                 <!-- Display the departure takeoff time -->
                 <td data-order="@quote.DepartureTakeoffTime.TimeOfDay">@quote.DepartureTakeoffTime.ToString("hh:mm tt")</td>  
 
-                                                               <!-- Only display if a round trip search -->
+                <td data-order="@quote.DepartureArrivalTime.TimeOfDay">@quote.DepartureArrivalTime.ToString("hh:mm tt")</td> 
+                
+                <td>@quote.DepartureStopCount</td>              <!--Display the number of stops on the departure trip-->
+
+                <!-- Only display if a round trip search -->                                       
                 @if (Model.IsRoundTrip)
                 {
                     <td>@quote.ReturnAirline</td>              <!-- Display Return Airline name -->
@@ -70,9 +76,13 @@
                     <!-- Display the return takeoff time -->
                     <td data-order="@quote.ReturnTakeoffTime.Value.TimeOfDay">@quote.ReturnTakeoffTime.Value.ToString("hh:mm tt")</td>  
 
+                    <!-- Display the return takeoff time -->
+                    <td data-order="@quote.ReturnArrivalTime.Value.TimeOfDay">@quote.ReturnArrivalTime.Value.ToString("hh:mm tt")</td>  
+
+                    <td>@quote.ReturnStopCount</td>
                 }
 
-                <td>@quote.IsDirect</td>                       <!-- Display whether the flight is direct -->
+                <td>@Decimal.ToInt32(quote.Cost.Value)</td>    <!-- No cents - display as int -->
             </tr>
 
         }
