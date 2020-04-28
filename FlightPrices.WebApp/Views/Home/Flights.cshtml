@@ -1,6 +1,5 @@
 ﻿<!-- The View for the Flight Price search results table. -->
 
-
 <!-- The ViewModel for this view is the HomePageQuotesViewModel -->
 @model FlightPrices.WebApp.ViewModels.Home.HomePageQuotesViewModel
 
@@ -9,80 +8,105 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!--Display some title information-->
-    <div class="form-group">
-        <h3>
-            Here's what we found for:
-        </h3>
+<!--Display some title information summarizing the search-->
+<div class="form-group">
+    <h3>
+        Here's what we found for:
+    </h3>
+    <h6 style="font-weight:normal">
+        @Model.OriginAirport &rArr; @Model.DestinationAirport
+    </h6>
+    <h6 style="font-weight:normal">
+        <span style="font-weight:bold">Departing on:</span> @Model.DepartureDate.ToString(" dddd MMMM dd, yyyy")
+    </h6>
+    @if (Model.IsRoundTrip)
+    {
         <h6 style="font-weight:normal">
-            @Model.OriginAirport &rArr; @Model.DestinationAirport
+            <span style="font-weight:bold">Returning on:</span> @Model.ReturnDate.ToString(" dddd MMMM dd, yyyy")
         </h6>
-        <h6 style="font-weight:normal">
-            <span style="font-weight:bold">Departing on:</span> @Model.DepartureDate.ToString(" dddd MMMM dd, yyyy")
-        </h6>
-        @if (Model.IsRoundTrip)
-        {
-            <h6 style="font-weight:normal">
-                <span style="font-weight:bold">Returning on:</span> @Model.ReturnDate.ToString(" dddd MMMM dd, yyyy")
-            </h6>
-        }
-    </div>
+    }
+</div>
 
 
 <!-- This table holds the quote data -->
 <table id="flights"
        class="table table-striped table-bordered"
        style="width:100%">
-    <thead>                                           <!-- Headers for the table -->                         
+
+    <!-- Headers for the table -->      
+    <thead>                                                              
         <tr>
-            <th>Departure Airline</th>                <!-- Departure Airline Column -->
-            <th>Departure Time (EST)</th>             <!-- Departure takeoff time column -->
-            <th>Departure Arrival Time (EST)</th>     <!-- Departure arrival time column -->
-            <th>Departure Trip # Stops</th>           <!-- Departure arrival time column -->
+            <!-- Departure Data Columns-->
+            <th>Departure Airline</th>                
+            <th>Departure Time (EST)</th>             
+            <th>Departure Arrival Time (EST)</th>     
+            <th>Departure Trip # Stops</th>           
                             
-            <!-- Only display these columns if a round trip search -->
+            <!-- Return trip columns (if applicable)-->
             @if (Model.IsRoundTrip)                   
             {
-                <th>Return Airline</th>               <!-- Return Airline Column -->
-                <th>Return Time (EST)</th>            <!-- Return takeoff time column -->
-                <th>Return Arrival Time (EST) </th>   <!--Return trip arrvial time-->
-                <th># Return Stops</th>               <!--Return trip stop count-->
+                <th>Return Airline</th>              
+                <th>Return Time (EST)</th>           
+                <th>Return Arrival Time (EST) </th>   
+                <th># Return Stops</th>               
             }
 
-            <th>Price ($)</th>                         <!-- Price Column Header; assumes value in USA dollars -->
+            <!-- Price Column Header; assumes value in USA dollars -->
+            <th>Price ($)</th>                         
         </tr>
     </thead>
 
     <!-- This is the actual body of the table -->  
     <tbody>
-                                                               <!-- For each quote, create a row -->
+                                                               
         @foreach (var quote in Model.Quotes)
         {
+            <!-- Determine if the departure trip is a red-eye -->
+            bool departureDifferentDays = quote.DepartureTakeoffTime.Date < quote.DepartureArrivalTime.Date;
+            string departureRedEyeDisplayClass = departureDifferentDays ? "" : "none";
+
             <tr>
-                <td>@quote.DepartureAirline</td>               <!-- Display departure airline name -->
-
-                <!-- Display the departure takeoff time -->
-                <td data-order="@quote.DepartureTakeoffTime.TimeOfDay">@quote.DepartureTakeoffTime.ToString("hh:mm tt")</td>  
-
-                <td data-order="@quote.DepartureArrivalTime.TimeOfDay">@quote.DepartureArrivalTime.ToString("hh:mm tt")</td> 
+                <!-- Departure data -->
+                <td>@quote.DepartureAirline</td> 
                 
-                <td>@quote.DepartureStopCount</td>              <!--Display the number of stops on the departure trip-->
+                <td data-order="@quote.DepartureTakeoffTime.TimeOfDay">
+                    @quote.DepartureTakeoffTime.ToString("hh:mm tt")
+                </td>  
 
-                <!-- Only display if a round trip search -->                                       
+                <td data-order="@quote.DepartureArrivalTime.TimeOfDay">
+                    @quote.DepartureArrivalTime.ToString("hh:mm tt") 
+                    <span style="color:red; display: @departureRedEyeDisplayClass">
+                         (@quote.DepartureArrivalTime.ToString("MM/dd"))
+                    </span>
+                </td> 
+                
+                <td>@quote.DepartureStopCount</td>             
+
+                <!-- Round trip data (if applicable) -->                                       
                 @if (Model.IsRoundTrip)
                 {
-                    <td>@quote.ReturnAirline</td>              <!-- Display Return Airline name -->
+                    <!-- Determine if the return trip is a red-eye -->
+                    bool returnDifferentDays = quote.ReturnTakeoffTime.Value.Date < quote.ReturnArrivalTime.Value.Date;
+                    string returnRedEyeDisplayClass = returnDifferentDays ? "" : "none";
 
-                    <!-- Display the return takeoff time -->
-                    <td data-order="@quote.ReturnTakeoffTime.Value.TimeOfDay">@quote.ReturnTakeoffTime.Value.ToString("hh:mm tt")</td>  
+                    <td>@quote.ReturnAirline</td>              
 
-                    <!-- Display the return takeoff time -->
-                    <td data-order="@quote.ReturnArrivalTime.Value.TimeOfDay">@quote.ReturnArrivalTime.Value.ToString("hh:mm tt")</td>  
+                    <td data-order="@quote.ReturnTakeoffTime.Value.TimeOfDay">
+                        @quote.ReturnTakeoffTime.Value.ToString("hh:mm tt")
+                    </td>  
+
+                    <td data-order="@quote.ReturnArrivalTime.Value.TimeOfDay">
+                        @quote.ReturnArrivalTime.Value.ToString("hh:mm tt")
+                        <span style="color:red; display: @returnRedEyeDisplayClass">
+                            (@quote.ReturnArrivalTime.Value.ToString("MM/dd"))
+                        </span>
+                    </td>  
 
                     <td>@quote.ReturnStopCount</td>
                 }
 
-                <td>@Decimal.ToInt32(quote.Cost.Value)</td>    <!-- No cents - display as int -->
+                <!-- No cents - display as int -->
+                <td>@Decimal.ToInt32(quote.Cost.Value)</td>    
             </tr>
 
         }
@@ -104,5 +128,6 @@
                 "bLengthChange": false     // Turn of the menu item for setting the number of rows per page
             });
         });
+
     </script>
 }

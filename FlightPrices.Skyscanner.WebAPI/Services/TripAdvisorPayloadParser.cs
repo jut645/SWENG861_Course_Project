@@ -39,6 +39,11 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
         {
             var flights = new List<Quote>();
 
+            if (Itineraries == null)
+            {
+                return flights;
+            }
+
             foreach (var itinerary in Itineraries)
             {
                 var flight = new Quote();

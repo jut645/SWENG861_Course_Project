@@ -1,6 +1,5 @@
 ﻿<!-- The View for the intial search form page -->
 
-
 <!-- The ViewModel for this view is the HomeSearchViewModel -->
 @model FlightPrices.WebApp.ViewModels.Home.HomeSearchViewModel
 @{
@@ -14,7 +13,8 @@
     method: FormMethod.Get,
     new {id = "search-form" }))
 {
-    <div class="form-group">               <!-- This field will accept input for the origin airport name -->
+    <!-- This field will accept input for the origin airport name -->
+    <div class="form-group">               
         <label for="origin">
             Where From?
         </label>
@@ -31,7 +31,8 @@
         @Html.ValidationMessageFor(model => model.OriginAirport, "", new { @class = "text-danger" })
     </div>
 
-    <div class="form-group">               <!-- This field will accept input for the destination airport name -->
+    <!-- This field will accept input for the destination airport name -->
+    <div class="form-group">               
         <label for="destination">
             Where To?
         </label>
@@ -48,7 +49,8 @@
         @Html.ValidationMessageFor(model => model.DestinationAirport, "", new { @class = "text-danger" })
     </div>
 
-    <div class="form-group">               <!-- This field will accept input for the take off date -->
+    <!-- This field will accept input for the take off date -->
+    <div class="form-group">               
         <div>
             <label for="departure-date">
                 When Do You Want To Leave?
@@ -67,7 +69,8 @@
         @Html.ValidationMessageFor(model => model.TakeOffDate, "", new { @class = "text-danger" })
     </div>
 
-    <div class="form-group">                <!-- This field will accept input for the return date -->
+    <!-- This field will accept input for the return date -->
+    <div class="form-group">                
         <div>
             <label for="return-date">
                 When Do You Want To Return?
@@ -83,7 +86,8 @@
                disabled />
     </div>
 
-    <div class="form-check">             <!-- This field for whether the flights should be round trip -->
+    <!-- This field for whether the flights should be round trip -->
+    <div class="form-check">             
 
         <!--Binds to the IsRoundTrip property in the ViewModel -->  
         <input type="checkbox"
@@ -107,6 +111,7 @@
     </button>
 }
 
+<!--This div will be displayed when the user submits the form and the UI is blocked-->
 <div id="message" style="display:none;">
     <h3>Searching flights</h3>
 </div>
@@ -183,9 +188,12 @@
 
     <script>
 
-        //submit search, display loading message
+        // This JQuery function displays a loading message and blocks the UI when the
+        // user hits search until the search results are ready
         $("#search-form").submit(function() 
         {
+            // This function modifies the HTML element that the users sees when the UI is
+            // blocked to simulate animation
             function startAnimation() 
             {
                let i = 0;
@@ -197,6 +205,7 @@
                }, 800);
             }
 
+            // This function blocks the UI with an HTML element
             $.blockUI({
                 css: 
                 {
@@ -209,6 +218,7 @@
                 fadeIn: 0
             });
 
+            // Run the animation on submission of the form
             startAnimation();    
         });
     </script>
