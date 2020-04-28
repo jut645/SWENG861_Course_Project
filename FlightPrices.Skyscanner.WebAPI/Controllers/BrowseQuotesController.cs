@@ -1,6 +1,7 @@
 ﻿using FlightPrices.Skyscanner.WebAPI.Clients.Contracts;
 using FlightPrices.Skyscanner.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -19,14 +20,16 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
     public class BrowseQuotesController : Controller
     {
         private readonly IClient _client;
+        private readonly ILogger<BrowseQuotesController> _logger;
 
         /// <summary>
         ///     The <c>BrowseQuotesController</c> class constructor.
         ///     <param name="client">An IClient interface implementation.</param>
         /// </summary>
-        public BrowseQuotesController(IClient client)
+        public BrowseQuotesController(IClient client, ILogger<BrowseQuotesController> logger)
         {
             _client = client;
+            _logger = logger;
         }
 
         /// <summary>
@@ -47,6 +50,11 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         [Route("oneWay")]
         public async Task<IActionResult> GetOneWay(string origin, string destination, DateTime departureDate)
         {
+            _logger.LogInformation("Request received for one way flight quotes.");
+            _logger.LogInformation($"Origin Airport: {origin}");
+            _logger.LogInformation($"Destination Airport: {destination}");
+            _logger.LogInformation($"Departure Date: {departureDate}");
+
             if (origin == destination)
             {
                 return BadRequest();

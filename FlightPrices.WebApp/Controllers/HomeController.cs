@@ -57,8 +57,12 @@ namespace FlightPrices.WebApp.Controllers
         {
             try
             {
+                _logger.LogInformation("WebApp requesting Airport data from WebAPI");
+
                 // Get valid airport names
                 var airports = await GetAirports();
+
+                _logger.LogInformation($"WebAPI responded with data for {airports.Count} airports.");
 
                 // Initialize the Home page view model with the valid airports
                 var viewModel = new HomeSearchViewModel
@@ -67,10 +71,10 @@ namespace FlightPrices.WebApp.Controllers
                 };
 
                 return View(viewModel);
-
             }
             catch (HttpRequestException ex)
             {
+                _logger.LogError("WebApp was unable to get airport data from WebAPI");
                 return View("HttpErrorPage");
             }
         }
@@ -91,8 +95,19 @@ namespace FlightPrices.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(HomeSearchViewModel searchForm)
         {
+            _logger.LogInformation($"Received form from the user:" + Environment.NewLine + 
+                $"Destination Airport: {searchForm.DestinationAirport}" + Environment.NewLine +
+                $"Origin Airport: {searchForm.OriginAirport}" + Environment.NewLine +
+                $"Return Date: {searchForm.ReturnDate}" + Environment.NewLine +
+                $"Takeoff Date: {searchForm.TakeOffDate}" + Environment.NewLine +
+                $"Round Trip: {searchForm.IsRoundTrip}");
+
+            _logger.LogInformation("WebApp requesting Airport data from WebAPI");
+
             // Get the list of airports for validation
             var airports = await GetAirports();
+
+            _logger.LogInformation($"WebAPI responded with data for {airports.Count} airports.");
 
             // Make sure the Origin Airport name is valid
             if (!airports.Select(a => a.AirportName).Contains(searchForm.OriginAirport))
@@ -110,6 +125,8 @@ namespace FlightPrices.WebApp.Controllers
             // If the validation fails, return ViewResult for the Home page with error information
             if (!ModelState.IsValid)
             {
+                _logger.LogWarning("Form validation failed.");
+
                 searchForm.Airports = airports;
                 return View("Index", searchForm);
             }
@@ -117,8 +134,11 @@ namespace FlightPrices.WebApp.Controllers
             // Send the appropriate HTTP Get request or return to the home page if the form is in an invalid state.
             if (!searchForm.IsRoundTrip)
             {
+                _logger.LogInformation("WebApp querying WebAPI for one-way flight prices.");
                 return await GetOneWayFlights(searchForm);
             }
+
+            _logger.LogInformation("WebApp querying WebAPI for round-trip flight prices.");
 
             // We've passed all validation and the only option remaining is roundtrip flights
             return await GetRoundTripFlights(searchForm);
