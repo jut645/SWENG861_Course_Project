@@ -2,6 +2,7 @@
 using FlightPrices.Skyscanner.WebAPI.Models;
 using FlightPrices.Skyscanner.WebAPI.Responses.TravelAdvisor;
 using FlightPrices.Skyscanner.WebAPI.Services;
+using FlightPrices.WebAPI.Exceptions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -63,10 +64,6 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         {
             await CreateSession(origin, destination, departureDate);    // Create session for this search
 
-            // Wait 3 seconds for poll to accumulate results on API side.
-            // The TripAdvisor recommends waiting roughly three seconds for them to compile results.
-            Thread.Sleep(3000);    
-
             return await PollCurrentSession();  // Poll the results
         }
 
@@ -88,11 +85,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
             // Create session for this search
             await CreateSession(origin, destination, departureDate, returnDate);
 
-            // Wait 6 seconds for poll to accumulate results on API side.
-            // The TripAdvisor recommends waiting roughly three seconds for them to compile results.
+            return await PollCurrentSession();  // Poll the results
 
-
-            return await PollCurrentSession();  // Poll the current results
         }
 
         /// <summary>
@@ -144,7 +138,9 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
                     x.ReturnAirline,
                     x.ReturnArrivalTime,
                     x.ReturnStopCount,
-                    x.ReturnTakeoffTime
+                    x.ReturnTakeoffTime,
+                    x.ReturnFlightNumber,
+                    x.DepartureFlightNumber
                 })
                 .Select(x => x.First())
                 .ToList();
@@ -221,9 +217,22 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         {
             // Get the HttpClient for the Skyscanner API
             var client = GetHttpClient();
+            HttpResponseMessage result = null;
 
-            // Make the HTTP Get Request
-            var result = await client.GetAsync(url);
+            try 
+            { 
+                // Make the HTTP Get Request
+                result = await client.GetAsync(url);
+            }
+            catch (HttpRequestException)
+            {
+                throw new IClientApiException(System.Net.HttpStatusCode.ServiceUnavailable);
+            }
+
+            if (!result.IsSuccessStatusCode)
+            {
+                throw new IClientApiException(result.StatusCode);
+            }
 
             // Get content of response as JSON
             var content = result.Content;
@@ -241,9 +250,22 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         {
             // Get the HttpClient for the Skyscanner API
             var client = GetHttpClient();
+            HttpResponseMessage result = null;
 
-            // Make the HTTP Get Request
-            var result = await client.GetAsync(url);
+            try
+            {
+                // Make the HTTP Get Request
+                result = await client.GetAsync(url);
+            }
+            catch (HttpRequestException)
+            {
+                throw new IClientApiException(System.Net.HttpStatusCode.ServiceUnavailable);
+            }
+
+            if (!result.IsSuccessStatusCode)
+            {
+                throw new IClientApiException(result.StatusCode);
+            }
 
             // Get content of response as JSON
             var content = result.Content;

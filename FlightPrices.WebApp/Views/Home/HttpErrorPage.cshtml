@@ -1,4 +1,6 @@
-﻿@{
+﻿@model FlightPrices.WebApp.ViewModels.ErrorPage.HttpErrorPageViewModel
+
+@{
     ViewData["Title"] = "HttpErrorPage";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,4 +9,6 @@
     <div style="max-width: 50%; align-self: flex-start; display:block; align-content:center">Uh Oh!</div>
     <div style="max-width: 50%; display:block; align-content:center">Something went wrong! Do you have connection to the internet?</div>
     <div style="max-width: 50%; align-self: flex-end; display:block; align-content:center">Try clicking Search to start a new flight search.</div>
+    <div></div>
+    <div>Http Status: @Model.StatusCode</div>
 </div>

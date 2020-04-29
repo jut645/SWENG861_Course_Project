@@ -11,6 +11,8 @@ using FlightPrices.Skyscanner.WebAPI.Models;
 using Newtonsoft.Json;
 using FlightPrices.WebApp.Payloads;
 using System.Net.Sockets;
+using FlightPrices.WebApp.Exceptions;
+using FlightPrices.WebApp.ViewModels.ErrorPage;
 
 namespace FlightPrices.WebApp.Controllers
 {
@@ -72,10 +74,12 @@ namespace FlightPrices.WebApp.Controllers
 
                 return View(viewModel);
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
                 _logger.LogError("WebApp was unable to get airport data from WebAPI");
-                return View("HttpErrorPage");
+
+                var viewModel = new HttpErrorPageViewModel(System.Net.HttpStatusCode.ServiceUnavailable);
+                return View("HttpErrorPage", viewModel);
             }
         }
 
@@ -135,13 +139,41 @@ namespace FlightPrices.WebApp.Controllers
             if (!searchForm.IsRoundTrip)
             {
                 _logger.LogInformation("WebApp querying WebAPI for one-way flight prices.");
-                return await GetOneWayFlights(searchForm);
+
+                try
+                {
+                    return await GetOneWayFlights(searchForm);
+                }
+                catch (FlightQuoteApiException ex)
+                {
+                    var viewModel = new HttpErrorPageViewModel(ex.StatusCode);
+                    return View("HttpErrorPage", viewModel);
+                }
+                catch (HttpRequestException)
+                {
+                    var viewModel = new HttpErrorPageViewModel(System.Net.HttpStatusCode.ServiceUnavailable);
+                    return View("HttpErrorPage", viewModel);
+                }
             }
 
             _logger.LogInformation("WebApp querying WebAPI for round-trip flight prices.");
 
-            // We've passed all validation and the only option remaining is roundtrip flights
-            return await GetRoundTripFlights(searchForm);
+            try
+            {
+                // We've passed all validation and the only option remaining is roundtrip flights
+                return await GetRoundTripFlights(searchForm);
+            }
+            catch (FlightQuoteApiException ex)
+            {
+                var viewModel = new HttpErrorPageViewModel(ex.StatusCode);
+                return View("HttpErrorPage", viewModel);
+            }
+            catch (HttpRequestException)
+            {
+                var viewModel = new HttpErrorPageViewModel(System.Net.HttpStatusCode.ServiceUnavailable);
+                return View("HttpErrorPage", viewModel);
+            }
+
         }
 
         /// <summary>
@@ -265,6 +297,11 @@ namespace FlightPrices.WebApp.Controllers
             
             // Make the HTTP GET request
             var response = await httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new FlightQuoteApiException(response.StatusCode);
+            }
 
             // Get the JSON content
             var content = response.Content;

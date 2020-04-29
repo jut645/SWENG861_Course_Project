@@ -61,7 +61,7 @@ namespace FlightPrices.Tests.WebApp.Controllers
         {
             // Initialize test objects.
             var logger = ILoggerMockFactory.Build<HomeController>();
-            var factory = IHttpClientFactoryMockFactory.Build(new Exception());
+            var factory = IHttpClientFactoryMockFactory.Build(new HttpRequestException());
             var testContext = new HomeController(logger, factory);
 
             // Run the index method and cast result

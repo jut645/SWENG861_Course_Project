@@ -150,7 +150,8 @@
 
             // Activate autocompletion using the airportNames list
             $("#origin, #destination").autocomplete(
-            {
+            {   
+                minLength: 3,
                 source: airportNames
             });
         })

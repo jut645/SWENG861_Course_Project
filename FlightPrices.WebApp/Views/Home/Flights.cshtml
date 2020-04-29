@@ -37,6 +37,7 @@
     <thead>                                                              
         <tr>
             <!-- Departure Data Columns-->
+            <th>Departure Flight #</th>
             <th>Departure Airline</th>                
             <th>Departure Time (EST)</th>             
             <th>Departure Arrival Time (EST)</th>     
@@ -45,6 +46,7 @@
             <!-- Return trip columns (if applicable)-->
             @if (Model.IsRoundTrip)                   
             {
+                <th>Return Flight #</th>
                 <th>Return Airline</th>              
                 <th>Return Time (EST)</th>           
                 <th>Return Arrival Time (EST) </th>   
@@ -67,6 +69,8 @@
 
             <tr>
                 <!-- Departure data -->
+                <td>@quote.DepartureFlightNumber</td>
+
                 <td>@quote.DepartureAirline</td> 
                 
                 <td data-order="@quote.DepartureTakeoffTime.TimeOfDay">
@@ -88,6 +92,8 @@
                     <!-- Determine if the return trip is a red-eye -->
                     bool returnDifferentDays = quote.ReturnTakeoffTime.Value.Date < quote.ReturnArrivalTime.Value.Date;
                     string returnRedEyeDisplayClass = returnDifferentDays ? "" : "none";
+
+                    <td>@quote.ReturnFlightNumber</td>
 
                     <td>@quote.ReturnAirline</td>              
 

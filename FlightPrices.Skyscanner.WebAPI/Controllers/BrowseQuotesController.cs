@@ -1,9 +1,11 @@
 ﻿using FlightPrices.Skyscanner.WebAPI.Clients.Contracts;
 using FlightPrices.Skyscanner.WebAPI.Models;
+using FlightPrices.WebAPI.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -55,28 +57,17 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
             _logger.LogInformation($"Destination Airport: {destination}");
             _logger.LogInformation($"Departure Date: {departureDate}");
 
-            if (origin == destination)
+            IList<Quote> quotes = null;
+            try
             {
-                return BadRequest();
+                // Get quotes from client
+                quotes = await _client.GetOneWayFlights(origin, destination, departureDate);
+            }
+            catch (IClientApiException ex)
+            {
+                return StatusCode((int)ex.StatusCode);
             }
 
-            if (departureDate.Date < DateTime.Now.Date)
-            {
-                return BadRequest();
-            }
-
-            var airports = _client.GetAirports();
-            var airportNames = airports
-                .Select(a => a.AirportName)
-                .ToList();
-
-            if (!airportNames.Contains(origin) || !airportNames.Contains(destination))
-            {
-                return BadRequest();
-            }
-
-            // Get quotes from client
-            var quotes = await _client.GetOneWayFlights(origin, destination, departureDate);
             var payload = new { quotes = quotes };
 
             return Ok(JsonConvert.SerializeObject(payload));   // Serialize payload to JSON
@@ -99,16 +90,25 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         /// </summary>
         [HttpGet]
         [Route("roundTrip")]
-        public async Task<string> GetRoundTrip(string origin, 
+        public async Task<IActionResult> GetRoundTrip(string origin, 
             string destination, 
             DateTime departureDate, 
             DateTime returnDate)
         {
-            // Get quotes from client
-            var quotes = await _client.GetRoundTripFlights(origin, destination, departureDate, returnDate);
+            IList<Quote> quotes = null;
+
+            try
+            {   // Get quotes from client
+                quotes = await _client.GetRoundTripFlights(origin, destination, departureDate, returnDate);
+            }
+            catch(IClientApiException ex)
+            {
+                return StatusCode((int)ex.StatusCode);
+            }
+
             var payload = new { quotes = quotes };
 
-            return JsonConvert.SerializeObject(payload);    // Serialize payload to JSON
+            return Ok(JsonConvert.SerializeObject(payload));    // Serialize payload to JSON
         }
     }
 }

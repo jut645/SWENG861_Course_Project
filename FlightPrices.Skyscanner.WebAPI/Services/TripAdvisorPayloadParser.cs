@@ -82,6 +82,28 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
             return complete;
         }
 
+        private int GetDepartureFlightNumber(JToken itinerary)
+        {
+            var flight = itinerary.SelectToken("f[0]");
+            var legs = (JArray)flight.SelectToken("l");
+            var firstLeg = legs.First();
+            var flightNumberJson = firstLeg.SelectToken("f").ToString();
+            var flightNumber = int.Parse(flightNumberJson);
+
+            return flightNumber;
+        }
+
+        private int GetReturnFlightNumber(JToken itinerary)
+        {
+            var flight = itinerary.SelectToken("f[1]");
+            var legs = (JArray)flight.SelectToken("l");
+            var lastLeg = legs.Last();
+            var flightNumberJson = lastLeg.SelectToken("f").ToString();
+            var flightNumber = int.Parse(flightNumberJson);
+
+            return flightNumber;
+        }
+
         public string GetKeyFromItinerary(JToken itinerary)
         {
             var key = itinerary.SelectToken("key").ToString();
@@ -124,6 +146,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
                 // Get number of stops on the departure trip
                 flight.DepartureStopCount = GetDepartureStopsCount(itinerary);
 
+                flight.DepartureFlightNumber = GetDepartureFlightNumber(itinerary);
+
                 if (IsRoundTrip())
                 {
                     // Get return airline
@@ -137,6 +161,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
 
                     // Get number of stops on the return trip
                     flight.ReturnStopCount = GetReturnStopsCount(itinerary);
+
+                    flight.ReturnFlightNumber = GetReturnFlightNumber(itinerary);
                 }
 
                 flight.Key = GetKeyFromItinerary(itinerary);
@@ -150,7 +176,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
         /// <summary>
         /// Parse the return arrival time from an JSON itinarary object.
         /// </summary>
-        /// <param name="itinerary">The itineray JSON.</param>
+        /// <param name="itinerary">The itinerary JSON.</param>
         /// <returns>
         /// The datetime corresponding to the return arrival time.
         /// </returns>
@@ -179,7 +205,6 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
             var arrivalTime = lastLeg.SelectToken("ad").ToString();
 
             return DateTime.Parse(arrivalTime);
-
         }
 
         /// <summary>

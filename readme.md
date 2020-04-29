@@ -26,6 +26,35 @@ the RESTful API offered by the FlightPrices.WebAPI. The FlightPrices.WebAPI then
 the format expected by the third-party API and makes the request to it. After recieving the response from
 the third-party API, the FlightPrices.WebAPI maps the response data and sends it back to the FlightPrices.WebApp.  
 
+# Inputs
+The expected inputs into the system are:
+
+* The name of an existing airport for arrival, different from origin (e.g. Jacksonville International Airport).
+* The name of an existing airport for origin, different from arrival (e.g. John F. Kennedy International Airport).
+* The date to depart from the origin airport (e.g. 05-14-2020).
+* The date to return to the origin airport (e.g. 05-18-2020).
+* Whether the trip is round-trip or one-way (e.g. Yes for round-trip, No for One-Way).
+
+# Outputs
+The expected outputs from the system are:
+
+* The flight number of the departure airline (e.g. 1078).
+* The flight airline name of the departure airline (e.g. Spirit)
+* The time of the departure from the origin airport in EST (e.g. 01:41 PM)
+* The time of the arrival to the destination airport in EST (e.g. 05:30 PM)
+  If the flight is overnight, indicate the date of arrival as well (e.g. 05:30 PM (05/18))
+* The number of stops on the trip from the origin airport to the destination airport (e.g. 1)
+
+if round trip:
+* The flight number of the return airline (e.g. 1078).
+* The flight airline name of the return airline (e.g. Spirit)
+* The time of the departure from the destination airport in EST (e.g. 01:41 PM)
+* The time of the arrival to the origin airport in EST. 
+  If the flight is overnight, indicate the date of arrival as well (e.g. 05:30 PM (05/18))
+* The number of stops on the trip from the destination airport to the origin airport (e.g. 1)
+
+* The cost in American USD (e.g. $82)
+
 # Third-Party API
 
 The FlightPrices solution relies on a third-party API for real-time flight data. The FlightPrices.WebAPI
