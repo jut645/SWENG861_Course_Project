@@ -24,5 +24,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Models
         public DateTime? ReturnArrivalTime { get; set; }      // Time of arrival for the return trip
 
         public int ReturnStopCount { get; set; }               // Number of stops on the return trip
+
+        public string Key { get; set; }
     }
 }

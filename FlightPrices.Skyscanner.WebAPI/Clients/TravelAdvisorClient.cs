@@ -90,7 +90,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
 
             // Wait 6 seconds for poll to accumulate results on API side.
             // The TripAdvisor recommends waiting roughly three seconds for them to compile results.
-            Thread.Sleep(3000);
+
 
             return await PollCurrentSession();  // Poll the current results
         }
@@ -103,17 +103,51 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         /// </summary>
         private async Task<IList<Quote>> PollCurrentSession()
         {
+            bool complete = false;
+            var flightCollection = new List<Quote>();
+
             // Build request URL for current session
             string url = TripAdvisorUrlBuilder.BuildPollUrl(_sessionId);
 
-            // Query TripAdvisor API
-            var jsonResponse = await MakeHTTPRequestRaw(url);
+            do
+            {
+                Thread.Sleep(1000);
 
-            // Build quote parser for json payload
-            var flightParser = new TripAdvisorPayloadParser(jsonResponse);
+                // Query TripAdvisor API
+                var jsonResponse = await MakeHTTPRequestRaw(url);
 
-            // Parse the payload into quote instances
-            return flightParser.GetQuoteData();
+                // Build quote parser for json payload
+                var flightParser = new TripAdvisorPayloadParser(jsonResponse);
+
+                // Parse the payload into quote instances
+                var flights = flightParser.GetQuoteData();
+
+                flightCollection.AddRange(flights);
+
+                if (flightParser.IsComplete())
+                {
+                    complete = true;
+                }
+
+            } while (!complete);
+
+            return flightCollection
+                .GroupBy(x => new 
+                { 
+                    x.Key, 
+                    x.Cost.CurrencyType,
+                    x.Cost.Value,
+                    x.DepartureAirline,
+                    x.DepartureArrivalTime,
+                    x.DepartureStopCount,
+                    x.DepartureTakeoffTime,
+                    x.ReturnAirline,
+                    x.ReturnArrivalTime,
+                    x.ReturnStopCount,
+                    x.ReturnTakeoffTime
+                })
+                .Select(x => x.First())
+                .ToList();
         }
 
         /// <summary>

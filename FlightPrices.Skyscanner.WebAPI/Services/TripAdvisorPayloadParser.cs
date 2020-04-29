@@ -41,6 +41,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
         /// </returns>
         public JArray Carriers => (JArray)_payload.SelectToken("carriers");
 
+        public JToken Summary => _payload.SelectToken("summary");
+
         /// <summary>
         /// Determines if the TripAdvisor JSON payload is empty or not.
         /// </summary>
@@ -70,6 +72,20 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
             }
 
             return true;
+        }
+
+        public bool IsComplete()
+        {
+            var summaryCompleteFlag = Summary.SelectToken("c");
+            var complete = Convert.ToBoolean(summaryCompleteFlag);
+
+            return complete;
+        }
+
+        public string GetKeyFromItinerary(JToken itinerary)
+        {
+            var key = itinerary.SelectToken("key").ToString();
+            return key;
         }
 
         /// <summary>
@@ -122,6 +138,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
                     // Get number of stops on the return trip
                     flight.ReturnStopCount = GetReturnStopsCount(itinerary);
                 }
+
+                flight.Key = GetKeyFromItinerary(itinerary);
 
                 flights.Add(flight);
             }
@@ -317,10 +335,10 @@ namespace FlightPrices.Skyscanner.WebAPI.Services
         /// </returns>
         private int GetIntegerPriceFromAgentToken(JToken agent)
         {
-            var priceJson = agent.SelectToken("pr.dp").ToString();
-            priceJson = priceJson.Replace("$", string.Empty);
+            var priceJson = agent.SelectToken("pr.p").ToString();
+            var price = Convert.ToDouble(priceJson);
 
-            return Convert.ToInt32(priceJson);
+            return (int)Math.Round(price, MidpointRounding.AwayFromZero);
         }
     }
 }
