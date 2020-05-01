@@ -40,7 +40,7 @@ namespace FlightPrices.Skyscanner.WebAPI
             var skyscannerBaseUrl = Configuration.GetSection("SkyscannerBaseUrl").Value;
             services.AddSingleton(typeof(BaseUrl), new BaseUrl(skyscannerBaseUrl));
 
-            services.AddTransient(typeof(IClient), typeof(TravelAdvisorClient));
+            services.AddTransient(typeof(IClient), typeof(TripAdvisorClient));
             services.AddDbContext<FlightPricesContext>();
 
             services.AddDbContext<FlightPricesContext>();

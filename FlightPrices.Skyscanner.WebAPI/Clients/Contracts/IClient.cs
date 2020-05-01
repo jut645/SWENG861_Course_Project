@@ -1,7 +1,6 @@
 ﻿using FlightPrices.Skyscanner.WebAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FlightPrices.Skyscanner.WebAPI.Clients.Contracts
@@ -18,7 +17,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients.Contracts
         ///     <param name="departureDate">The date that the flight will depart from the origin airport.</param>
         ///     <param name="returnDate">The date that the flight will depart to return to the origin.</param>
         ///      <returns>
-        ///         The <c>Flight</c> instances for this search.
+        ///         The <c>Quote</c> instances for this search.
         ///     </returns>
         /// </summary>
         Task<IList<Quote>> GetRoundTripFlights(string origin,
@@ -32,7 +31,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients.Contracts
         ///     <param name="destination">The name of the destination airport.</param>
         ///     <param name="departureDate">The date that the flight will depart from the origin airport.</param>
         ///      <returns>
-        ///         The <c>Flight</c> instances for this search.
+        ///         The <c>Quote</c> instances for this search.
         ///     </returns>
         /// </summary>
         Task<IList<Quote>> GetOneWayFlights(string origin, string destination, DateTime departureDate);

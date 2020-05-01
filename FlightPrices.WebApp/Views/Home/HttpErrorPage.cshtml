@@ -1,4 +1,6 @@
-﻿@model FlightPrices.WebApp.ViewModels.ErrorPage.HttpErrorPageViewModel
+﻿<!-- The View displayed when an error occurs during system execution. -->
+
+@model FlightPrices.WebApp.ViewModels.ErrorPage.HttpErrorPageViewModel
 
 @{
     ViewData["Title"] = "HttpErrorPage";
@@ -6,9 +8,13 @@
 }
 
 <div style="display: flex, block; align-items: center; justify-content: center;">
+
+    <!-- Display generic error message and recovery suggestions -->
     <div style="max-width: 50%; align-self: flex-start; display:block; align-content:center">Uh Oh!</div>
     <div style="max-width: 50%; display:block; align-content:center">Something went wrong! Do you have connection to the internet?</div>
     <div style="max-width: 50%; align-self: flex-end; display:block; align-content:center">Try clicking Search to start a new flight search.</div>
     <div></div>
+    
+    <!-- Display the Http Status code of failure -->
     <div>Http Status: @Model.StatusCode</div>
 </div>

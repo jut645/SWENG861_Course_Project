@@ -14,12 +14,12 @@ using System.Threading.Tasks;
 namespace FlightPrices.Skyscanner.WebAPI.Clients
 {
     /// <summary>
-    ///     Class <c>TravelAdvisorClient</c> faciliates communication with the TripAdvisor API.
+    ///     Class <c>TripAdvisorClient</c> faciliates communication with the TripAdvisor API.
     ///     <remarks>
     ///         Implements the <c>IClient</c> interface. 
     ///     </remarks> 
     /// </summary>
-    public class TravelAdvisorClient : IClient
+    public class TripAdvisorClient : IClient
     {
         // Declare private fields
         private readonly FlightPricesContext _context;
@@ -27,11 +27,11 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         private string _sessionId = string.Empty;
 
         /// <summary>
-        ///     The <c>TravelAdvisorClient</c> class constructor.
+        ///     The <c>TripAdvisorClient</c> class constructor.
         ///     <param name="factory">An IHttpClientFactory implementation instance.</param>
         ///     <param name="context">The DbContext for the FlightPrices database.</param>
         /// </summary>
-        public TravelAdvisorClient(FlightPricesContext context, IHttpClientFactory factory)
+        public TripAdvisorClient(FlightPricesContext context, IHttpClientFactory factory)
         {
             _context = context;
             _factory = factory;
@@ -57,7 +57,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         ///     <param name="destination">The name of the destination airport.</param>
         ///     <param name="departureDate">The date that the flight will depart from the origin airport.</param>
         ///      <returns>
-        ///         The <c>Flight</c> instances for this search.
+        ///         The <c>Quote</c> instances for this search.
         ///     </returns>
         /// </summary>
         public async Task<IList<Quote>> GetOneWayFlights(string origin, string destination, DateTime departureDate)
@@ -74,7 +74,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         ///     <param name="departureDate">The date that the flight will depart from the origin airport.</param>
         ///     <param name="returnDate">The date that the flight will depart to return to the origin.</param>
         ///      <returns>
-        ///         The <c>Flight</c> instances for this search.
+        ///         The <c>Quote</c> instances for this search.
         ///     </returns>
         /// </summary>
         public async Task<IList<Quote>> GetRoundTripFlights(string origin, 
@@ -92,12 +92,15 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
         /// <summary>
         ///     Polls the current session for quotes.
         ///      <returns>
-        ///         The <c>Flight</c> instances for this search.
+        ///         The <c>Quote</c> instances for this search.
         ///     </returns>
         /// </summary>
         private async Task<IList<Quote>> PollCurrentSession()
         {
-            bool complete = false;
+            // Flag to track if TripAdvisor API has completed compiling results
+            bool complete = false;    
+
+            // Container for the flight quotes
             var flightCollection = new List<Quote>();
 
             // Build request URL for current session
@@ -105,7 +108,10 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
 
             do
             {
-                Thread.Sleep(1000);
+                // Wait 1 second to avoid excessive API calls.
+                // The free TripAdvisor API has a limit, so we need to avoid 
+                // wasting calls.
+                Thread.Sleep(1000);    
 
                 // Query TripAdvisor API
                 var jsonResponse = await MakeHTTPRequestRaw(url);
@@ -116,15 +122,18 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
                 // Parse the payload into quote instances
                 var flights = flightParser.GetQuoteData();
 
+                // Add the batch of flight quotes
                 flightCollection.AddRange(flights);
 
+                // Check if the TripAdvisor API has signaled completion
                 if (flightParser.IsComplete())
                 {
                     complete = true;
                 }
 
-            } while (!complete);
+            } while (!complete);  // Iterate until TripAdvisor is done
 
+            // Return the flight quotes, dropping duplicates
             return flightCollection
                 .GroupBy(x => new 
                 { 
@@ -224,11 +233,12 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
                 // Make the HTTP Get Request
                 result = await client.GetAsync(url);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException)    // Errors such as internet loss caught here
             {
                 throw new IClientApiException(System.Net.HttpStatusCode.ServiceUnavailable);
             }
 
+            // If the request was unsuccessful, throw exception indicating the failure
             if (!result.IsSuccessStatusCode)
             {
                 throw new IClientApiException(result.StatusCode);
@@ -257,11 +267,12 @@ namespace FlightPrices.Skyscanner.WebAPI.Clients
                 // Make the HTTP Get Request
                 result = await client.GetAsync(url);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException)    // Errors such as internet loss caught here 
             {
                 throw new IClientApiException(System.Net.HttpStatusCode.ServiceUnavailable);
             }
 
+            // If the request is unsuccessful, throw exception indicating failure
             if (!result.IsSuccessStatusCode)
             {
                 throw new IClientApiException(result.StatusCode);

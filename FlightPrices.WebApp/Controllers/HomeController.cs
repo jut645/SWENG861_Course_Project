@@ -10,7 +10,6 @@ using System.Net.Http;
 using FlightPrices.Skyscanner.WebAPI.Models;
 using Newtonsoft.Json;
 using FlightPrices.WebApp.Payloads;
-using System.Net.Sockets;
 using FlightPrices.WebApp.Exceptions;
 using FlightPrices.WebApp.ViewModels.ErrorPage;
 
@@ -34,7 +33,7 @@ namespace FlightPrices.WebApp.Controllers
         ///     <param name="factory">An IHttpClientFactory implementation instance.</param>
         ///     <remarks>
         ///         The ILogger and IHttpClientFactory implementations are injected via the .NET Dependency Injection
-        ///         framekwork on a typical program execution.
+        ///         framework on a typical program execution.
         ///     </remarks>
         /// </summary>
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory factory)
@@ -52,8 +51,6 @@ namespace FlightPrices.WebApp.Controllers
         ///         Asynchronous because it makes an HTTP Get request via an HttpClient instance to get the list of
         ///         valid airport names.
         ///     </remarks>
-        ///     <see cref="GetAirports"/>
-        ///     <see cref="MakeHTTPGetRequest{T}(string)"/>
         /// </summary>
         public async Task<IActionResult> Index()
         {
@@ -74,10 +71,11 @@ namespace FlightPrices.WebApp.Controllers
 
                 return View(viewModel);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException)    // This would indicate a failure such as internet loss
             {
                 _logger.LogError("WebApp was unable to get airport data from WebAPI");
 
+                // Indicate that the service is unavailable
                 var viewModel = new HttpErrorPageViewModel(System.Net.HttpStatusCode.ServiceUnavailable);
                 return View("HttpErrorPage", viewModel);
             }
@@ -85,6 +83,7 @@ namespace FlightPrices.WebApp.Controllers
 
         /// <summary>
         ///     Performs a query for flight prices based on the form model submitted.
+        ///     <param name="searchForm">The view model containing the expected input into the system.</param>
         ///     <returns>
         ///         The task instance corresponding to the ViewResult for the Flights view if the form is valid. 
         ///         If there is a validation error, the ViewResult will be for the Home page with the validation
@@ -94,7 +93,6 @@ namespace FlightPrices.WebApp.Controllers
         ///         Asynchronous because it makes an HTTP Get request via an HttpClient instance to get the list of
         ///         matching flight prices.
         ///     </remarks>
-        ///     <see cref="MakeHTTPGetRequest{T}(string)"/>
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Search(HomeSearchViewModel searchForm)
@@ -144,12 +142,12 @@ namespace FlightPrices.WebApp.Controllers
                 {
                     return await GetOneWayFlights(searchForm);
                 }
-                catch (FlightQuoteApiException ex)
+                catch (FlightQuoteApiException ex)  // This indicates a failure on the WebAPI side
                 {
                     var viewModel = new HttpErrorPageViewModel(ex.StatusCode);
                     return View("HttpErrorPage", viewModel);
                 }
-                catch (HttpRequestException)
+                catch (HttpRequestException)       // This indicates a failure such as internet loss
                 {
                     var viewModel = new HttpErrorPageViewModel(System.Net.HttpStatusCode.ServiceUnavailable);
                     return View("HttpErrorPage", viewModel);
@@ -163,12 +161,12 @@ namespace FlightPrices.WebApp.Controllers
                 // We've passed all validation and the only option remaining is roundtrip flights
                 return await GetRoundTripFlights(searchForm);
             }
-            catch (FlightQuoteApiException ex)
+            catch (FlightQuoteApiException ex)  // This indicates a failure on the WebAPI side
             {
                 var viewModel = new HttpErrorPageViewModel(ex.StatusCode);
                 return View("HttpErrorPage", viewModel);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException)       // This indicates a failure such as internet loss
             {
                 var viewModel = new HttpErrorPageViewModel(System.Net.HttpStatusCode.ServiceUnavailable);
                 return View("HttpErrorPage", viewModel);
@@ -185,10 +183,10 @@ namespace FlightPrices.WebApp.Controllers
         ///         Asynchronous because it makes an HTTP Get request via an HttpClient instance to get the list of
         ///         valid airports.
         ///     </remarks>
-        ///     <see cref="MakeHTTPGetRequest{T}(string)"/>
         /// </summary>
         public async Task<IList<Airports>> GetAirports()
         {
+            // Get the airports data from the WebAPI project
             var airportsPayload = await MakeHTTPGetRequest<AirportsPayload>("airports");
 
             return airportsPayload.Airports;
@@ -196,6 +194,7 @@ namespace FlightPrices.WebApp.Controllers
 
         /// <summary>
         ///     Make an Http GET request for one way flights corresponding to a search form.
+        /// <param name="searchForm">The view model containing the expected input into the system.</param>
         ///     <returns>
         ///         The task corresponding to the ViewResult for the one-way flight prices.
         ///     </returns>
@@ -203,7 +202,6 @@ namespace FlightPrices.WebApp.Controllers
         ///         Asynchronous because it makes an HTTP Get request via an HttpClient instance to get the list of
         ///         one-way flight prices.
         ///     </remarks>
-        ///     <see cref="MakeHTTPGetRequest{T}(string)"/>
         /// </summary>
         private async Task<IActionResult> GetOneWayFlights(HomeSearchViewModel searchForm)
         {
@@ -231,6 +229,7 @@ namespace FlightPrices.WebApp.Controllers
 
         /// <summary>
         ///     Make an Http GET request for round trip flights corresponding to a search form.
+        /// <param name="searchForm">The view model containing the expected input into the system.</param>
         ///     <returns>
         ///         The task corresponding to the ViewResult for the round-trip flight prices.
         ///     </returns>
@@ -238,7 +237,6 @@ namespace FlightPrices.WebApp.Controllers
         ///         Asynchronous because it makes an HTTP Get request via an HttpClient instance to get the list of
         ///         round-trip flight prices.
         ///     </remarks>
-        ///     <see cref="MakeHTTPGetRequest{T}(string)"/>
         /// </summary>
         private async Task<IActionResult> GetRoundTripFlights(HomeSearchViewModel searchForm)
         {
@@ -285,10 +283,13 @@ namespace FlightPrices.WebApp.Controllers
 
         /// <summary>
         ///     Helper method to make an HTTP get request based on a generic payload structure.
+        ///     <param name="url">The url to append to the base url for the HTTP request.</param>
         ///     <returns>
         ///         The task corresponding to the HTTP Get request payload.
         ///     </returns>
-        ///     <see cref="GetHttpClient"/>
+        ///     <remarks>
+        ///     An example url is 'airports'. This would be appends to the httpClient base url.
+        ///     </remarks>
         /// </summary>
         private async Task<T> MakeHTTPGetRequest<T>(string url)
         {
@@ -298,6 +299,8 @@ namespace FlightPrices.WebApp.Controllers
             // Make the HTTP GET request
             var response = await httpClient.GetAsync(url);
 
+            // Test if the response was successful
+            // If not successful, throw an exception with the status code of the response
             if (!response.IsSuccessStatusCode)
             {
                 throw new FlightQuoteApiException(response.StatusCode);
@@ -310,6 +313,5 @@ namespace FlightPrices.WebApp.Controllers
             // Deserialize the JSON into the generic type
             return JsonConvert.DeserializeObject<T>(json);
         }
-
     }
 }

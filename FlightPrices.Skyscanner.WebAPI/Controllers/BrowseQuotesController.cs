@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FlightPrices.Skyscanner.WebAPI.Controllers
@@ -21,12 +20,14 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
     [Route("[controller]")]
     public class BrowseQuotesController : Controller
     {
+        // Private fields
         private readonly IClient _client;
         private readonly ILogger<BrowseQuotesController> _logger;
 
         /// <summary>
         ///     The <c>BrowseQuotesController</c> class constructor.
         ///     <param name="client">An IClient interface implementation.</param>
+        ///     <param name="logger">An ILogger interface implementation.</param>
         /// </summary>
         public BrowseQuotesController(IClient client, ILogger<BrowseQuotesController> logger)
         {
@@ -40,7 +41,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         ///     <param name="destination">The name of the destination airport.</param>
         ///     <param name="departureDate">The date that the flight will depart from the origin airport.</param>
         ///      <returns>
-        ///         The JSON payload corresponding to the one way flight quotes.
+        ///         An IActionResult containing the JSON payload corresponding to the one way flight quotes.
+        ///         The IActionResult is wrapped in an awaitable Task.
         ///     </returns>
         ///      <remarks>
         ///         Example Url:
@@ -63,11 +65,13 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
                 // Get quotes from client
                 quotes = await _client.GetOneWayFlights(origin, destination, departureDate);
             }
-            catch (IClientApiException ex)
+            catch (IClientApiException ex)    // This indicates something failed on the TripAdvisor side
             {
+                // Return a StatusCodeResult with the failed Http Response code
                 return StatusCode((int)ex.StatusCode);
             }
 
+            // Package the payload for JSON serialization
             var payload = new { quotes = quotes };
 
             return Ok(JsonConvert.SerializeObject(payload));   // Serialize payload to JSON
@@ -80,7 +84,8 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         ///     <param name="departureDate">The date that the flight will depart from the origin airport.</param>
         ///     <param name="returnDate">The date that the flight will depart to return to the origin.</param>
         ///      <returns>
-        ///         The JSON payload corresponding to the one way flight quotes.
+        ///         An IActionResult containing the JSON payload corresponding to the round trip flight quotes.
+        ///         The IActionResult is wrapped in an awaitable Task.
         ///     </returns>
         ///     <remarks>
         ///         Example Url:
@@ -101,11 +106,13 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
             {   // Get quotes from client
                 quotes = await _client.GetRoundTripFlights(origin, destination, departureDate, returnDate);
             }
-            catch(IClientApiException ex)
+            catch(IClientApiException ex)    // This indicates something failed on the TripAdvisor side
             {
+                // Return a StatusCodeResult with the failed Http Response code
                 return StatusCode((int)ex.StatusCode);
             }
 
+            // Package the payload for JSON serialization
             var payload = new { quotes = quotes };
 
             return Ok(JsonConvert.SerializeObject(payload));    // Serialize payload to JSON

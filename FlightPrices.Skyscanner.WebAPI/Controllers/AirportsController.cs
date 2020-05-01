@@ -43,6 +43,7 @@ namespace FlightPrices.Skyscanner.WebAPI.Controllers
         {
             _logger.LogInformation("Request received for Aiports data.");
 
+            // Package payload for JSON serialization
             var payload = new { airports = _client.GetAirports() };
 
             _logger.LogInformation($"Returning data for {payload.airports.Count} airports.");

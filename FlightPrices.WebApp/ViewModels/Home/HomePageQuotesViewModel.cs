@@ -9,16 +9,16 @@ namespace FlightPrices.WebApp.ViewModels.Home
     /// </summary>
     public class HomePageQuotesViewModel
     {
-        public IList<Quote> Quotes { get; set; }    // The list of quotes corresponding to the current search
+        public IList<Quote> Quotes { get; set; }     // The list of quotes corresponding to the current search
 
-        public bool IsRoundTrip { get; set; }       // True if round trip search; false otherwise
+        public bool IsRoundTrip { get; set; }        // True if round trip search; false otherwise
 
-        public DateTime DepartureDate { get; set; }
+        public DateTime DepartureDate { get; set; }  // The date of departure from the origin aiport.
 
-        public DateTime ReturnDate { get; set; }
+        public DateTime ReturnDate { get; set; }     // The date of departure from the destination airport.
 
-        public string OriginAirport { get; set; }
+        public string OriginAirport { get; set; }    // The origin airport name
 
-        public string DestinationAirport { get; set; }
+        public string DestinationAirport { get; set; }    // The destination airport name
     }
 }

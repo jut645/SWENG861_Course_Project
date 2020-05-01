@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FlightPrices.Skyscanner.WebAPI.Clients
+﻿namespace FlightPrices.Skyscanner.WebAPI.Clients
 {
     /// <summary>
     /// This class acts as a container for the Skyscanner API URL to be used 
